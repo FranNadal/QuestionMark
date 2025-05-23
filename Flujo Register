@@ -1,0 +1,12 @@
+Flujo general que vas a hacer:
+1-Cuando el usuario se registra, guardás en la base de datos cuenta_validada = 0 (como ya lo hacés).
+
+2-Generás un token único para validación (un string random).
+
+3-Guardás ese token en la base (podés agregar una columna nueva token_validacion en la tabla Usuario).
+
+4-Mandás un email al usuario con un link que incluya ese token (ejemplo: https://tuweb.com/validar?token=xxxxx).
+
+5-Cuando el usuario hace click en ese link, capturás el token, buscás al usuario con ese token y si lo encontrás, seteás cuenta_validada = 1 y borrás o invalidás el token.
+
+6-A partir de ese momento, el login solo permitirá usuarios con cuenta_validada = 1.

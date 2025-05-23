@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #mapid { height: 300px; margin-bottom: 15px; }
+    </style>
+</head>
+<body class="w3-light-grey">
+
+<div class="w3-container w3-display-middle w3-card-4 w3-white w3-padding-large" style="max-width:600px;">
+    <h2 class="w3-center">Registro</h2>
+
+
+
+
+
+    <form action="/QuestionMark/register/doRegister" method="POST" enctype="multipart/form-data" class="w3-container">
+        {{#error_message}}
+            <div class="w3-text-red"
+                 style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
+                {{error_message}}
+            </div>
+        {{/error_message}}
+
+        <label>Nombre completo</label>
+        <input class="w3-input w3-border" type="text" name="nombre_completo" required >
+
+        <label>Año de nacimiento</label>
+        <input class="w3-input w3-border" type="number" name="ano_nacimiento" min="1900" max="2025" required >
+
+        <label for="sexo">Sexo:</label>
+        <select id="sexo" name="sexo" required>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+        </select><br>
+
+        <label>Ubicación (arrastre el marcador para seleccionar)</label>
+        <div id="mapid"></div>
+
+        <label>País</label>
+        <input class="w3-input w3-border" type="text" id="pais" name="pais" readonly required >
+
+        <label>Ciudad</label>
+        <input class="w3-input w3-border" type="text" id="ciudad" name="ciudad" readonly required >
+
+        <!-- Campos ocultos para latitud y longitud -->
+        <input type="hidden" id="latitud" name="latitud"  required>
+        <input type="hidden" id="longitud" name="longitud"  required>
+
+        <label>Correo electrónico</label>
+        <input class="w3-input w3-border" type="email" name="email" required >
+
+        <label>Nombre de usuario</label>
+        <input class="w3-input w3-border" type="text" name="nombre_usuario" required >
+
+        <label>Contraseña</label>
+        <input class="w3-input w3-border" type="password" name="contrasenia" required>
+
+        <label>Repetir contraseña</label>
+        <input class="w3-input w3-border" type="password" name="repetir_contrasenia" required>
+
+        <label>Foto de perfil</label>
+        <input class="w3-input w3-border" type="file" name="foto_perfil" accept="image/*">
+
+
+        <br>
+        <button class="w3-button w3-blue w3-block" type="submit">Registrarse</button>
+
+    </form>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Coordenadas iniciales Buenos Aires
+        var lat = -34.6037;
+        var lon = -58.3816;
+
+        // Inicializar mapa
+        var mymap = L.map('mapid').setView([lat, lon], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(mymap);
+
+        // Marcador draggable
+        var marker = L.marker([lat, lon], {draggable: true}).addTo(mymap);
+
+        function actualizarCampos(pos) {
+            document.getElementById('latitud').value = pos.lat;
+            document.getElementById('longitud').value = pos.lng;
+
+            // Reverse geocoding con Nominatim
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var address = data.address || {};
+                        document.getElementById('pais').value = address.country || '';
+                        document.getElementById('ciudad').value = address.city || address.town || address.village || '';
+                    })
+                    .catch(() => {
+                        document.getElementById('pais').value = '';
+                        document.getElementById('ciudad').value = '';
+                    });
+        }
+
+        // Evento dragend para actualizar los campos
+        marker.on('dragend', function () {
+            var pos = marker.getLatLng();
+            actualizarCampos(pos);
+        });
+
+        // Cargar datos iniciales
+        actualizarCampos(marker.getLatLng());
+    });
+</script>
+
+</body>
+</html>

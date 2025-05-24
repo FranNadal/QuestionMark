@@ -8,7 +8,6 @@ class FilePresenter
 
     public function render($viewName, $data = [])
     {
-        require_once("view/header.php");
         require_once("view/" . $viewName . "View.php");
     }
 

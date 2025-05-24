@@ -19,7 +19,12 @@ class TourController
 
     public function show()
     {
-        echo "Metodo por defecto si no paso parametro get method";
+        session_start();
+        if (isset($_SESSION["user"])){
+            $this->view->render("home");
+        }else{
+            $this->view->render("inicio");
+        }
     }
 
 }

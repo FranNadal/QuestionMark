@@ -13,6 +13,16 @@ public function register(){
     $this->view->render("register");
 }
 
+    public function show()
+    {
+        session_start();
+        if (isset($_SESSION["user"])){
+            $this->view->render("home");
+        }else{
+            $this->view->render("inicio");
+        }
+    }
+
 
     private function redirectTo($str)
     {
@@ -51,7 +61,7 @@ $foto_perfil = $_FILES['foto_perfil'] ?? null;
         if (is_string($resultado) ){
             $this->view->render('register', ['error_message' => $resultado]);
         }else{
-            $this->redirectTo("/QuestionMark/group/success");
+            $this->redirectTo("/QuestionMark/login/view");
 
     }
 }

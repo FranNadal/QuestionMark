@@ -16,4 +16,14 @@ class SongController
         $data["canciones"] = $this->model->getSongs();
         $this->view->render("songs", $data);
     }
+
+    public function show()
+    {
+        session_start();
+        if (isset($_SESSION["user"])){
+            $this->view->render("home");
+        }else{
+            $this->view->render("inicio");
+        }
+    }
 }

@@ -1,7 +1,7 @@
 CREATE DATABASE questionmark;
 USE questionmark;
 
-CREATE TABLE Usuarios (
+CREATE TABLE Usuario (
                           id_usuario INT PRIMARY KEY AUTO_INCREMENT,
                           nombre_completo VARCHAR(255) NOT NULL,
                           ano_nacimiento INT NOT NULL,

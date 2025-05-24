@@ -9,14 +9,33 @@ class LoginController
         $this->view = $view;
         $this->model = $model;
     }
-
     public function view(){
-        $this->view->render("login");
+        $this->view->render("login", ['error_message' => '']);
     }
 
 
+    private function redirectTo($str)
+    {
+        header("location:" . $str);
+        exit();
+    }
 
     public function doLogin(){
 
+        $email = $_POST['email'];
+        $contrasenia = $_POST['contrasenia'];
+
+        $resultado = $this->model->loguearse($email,$contrasenia);
+
+        if (is_string($resultado) ){
+            $this->view->render('login', ['error_message' => $resultado]);
+
+        }else{
+            session_start();
+
+            $_SESSION['user'] = $resultado;
+            $this->redirectTo("/QuestionMark/group/success");
+
+        }
     }
 }

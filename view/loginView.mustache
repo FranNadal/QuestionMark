@@ -11,7 +11,13 @@
 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
     <h2 class="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
 
-    <form action="/login/doLogin" method="POST" class="space-y-4">
+    {{#error_message}}
+        <div class="w3-text-red" style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
+            {{error_message}}
+        </div>
+    {{/error_message}}
+
+    <form action="/QuestionMark/login/doLogin" method="POST" class="space-y-4">
 
 
         <div>

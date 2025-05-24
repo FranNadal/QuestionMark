@@ -17,6 +17,14 @@ class GroupController
         $this->view->render("group", $integrantes);
     }
 
+    public function show()
+    {
+        if (isset($_SESSION["user"])) {
+            $this->view->render("home");
+        }
+        $this->view->render("inicio");
+    }
+
     public function add()
     {
         $nombre = $_POST["nombre"]; // Acá valido que el parametro no sea vacio o erroneo

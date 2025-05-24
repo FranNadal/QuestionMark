@@ -11,6 +11,9 @@ class HomeController
 
     public function show()
     {
-        $this->view->render("band");
+        if (isset($_SESSION["user"])) {
+            $this->view->render("home");
+        }
+        $this->view->render("inicio");
     }
 }

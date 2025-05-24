@@ -13,6 +13,14 @@ public function register(){
     $this->view->render("register");
 }
 
+    public function show()
+    {
+        if (isset($_SESSION["user"])) {
+            $this->view->render("home");
+        }
+        $this->view->render("inicio");
+    }
+
 
     private function redirectTo($str)
     {

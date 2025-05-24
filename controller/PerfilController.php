@@ -1,6 +1,6 @@
 <?php
 
-class LoginController
+class PerfilController
 {
 
     private $view;
@@ -11,7 +11,10 @@ class LoginController
     }
 
     public function view(){
-        $this->view->render("login");
+        session_start();
+        $_SESSION["user"] = "carlosr";
+        $data["datos"] = $this->model->obtenerPerfil($_SESSION["user"]);
+        $this->view->render("perfil", $data);
     }
 
     public function show()
@@ -20,10 +23,5 @@ class LoginController
             $this->view->render("home");
         }
         $this->view->render("inicio");
-    }
-
-
-    public function doLogin(){
-
     }
 }

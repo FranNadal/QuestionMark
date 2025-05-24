@@ -15,10 +15,12 @@ class LoginController
 
     public function show()
     {
-        if (isset($_SESSION["user"])) {
+        session_start();
+        if (isset($_SESSION["user"])){
             $this->view->render("home");
+        }else{
+            $this->view->render("inicio");
         }
-        $this->view->render("inicio");
     }
 
     private function redirectTo($str)
@@ -39,10 +41,17 @@ class LoginController
 
         }else{
             session_start();
-
-            $_SESSION['user'] = $resultado;
-            $this->redirectTo("/QuestionMark/group/success");
-
+            $_SESSION['user'] = $resultado["nombre_usuario"];
+            $this->redirectTo("/QuestionMark/home/view");
         }
     }
+
+    public function logout()
+    {
+        session_start();
+        session_destroy();
+        $this->redirectTo("/QuestionMark/");
+    }
+
+
 }

@@ -19,9 +19,11 @@ class SongController
 
     public function show()
     {
-        if (isset($_SESSION["user"])) {
+        session_start();
+        if (isset($_SESSION["user"])){
             $this->view->render("home");
+        }else{
+            $this->view->render("inicio");
         }
-        $this->view->render("inicio");
     }
 }

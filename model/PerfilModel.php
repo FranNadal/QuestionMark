@@ -11,7 +11,7 @@ class PerfilModel
     }
 
     public function obtenerPerfil($usuario){
-        $sql = "SELECT * FROM usuarios WHERE nombre_usuario = ?";
+        $sql = "SELECT * FROM usuario WHERE nombre_usuario = ?";
         return $this->database->fetchOne($sql, [$usuario]);
     }
 }

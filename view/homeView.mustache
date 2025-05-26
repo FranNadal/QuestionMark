@@ -60,6 +60,9 @@
             background-color: #6a1b9a;
             padding: 8px 16px;
             border-radius: 5px;
+            border: 0.5px solid #ffffff;
+            font-size: 16px; /* o el tamaño que prefieras */
+            font-weight: bold;
         }
         .navbar-right {
             flex: 1;
@@ -96,6 +99,20 @@
             transform: scale(0.9) translateY(2px);
         }
 
+        .navbar-center a {
+            display: inline-block;
+            text-decoration: none;
+            color: #ffffff;
+            animation: jump 3s ease-in-out infinite;
+            animation-delay: 5s; /* espera inicial antes de empezar a saltar */
+        }
+
+        /* Animación */
+        @keyframes jump {
+            0%, 100% { transform: translateY(0); }
+            10% { transform: translateY(-5px); }
+            20% { transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -107,7 +124,7 @@
     </div>
 
     <div class="navbar-center">
-        <a href="#">Jugar</a>
+        <a href="#">JUGAR</a>
     </div>
 
     <div class="navbar-right">

@@ -8,6 +8,10 @@ Options -Indexes
     RewriteEngine On
   RewriteBase /QuestionMark/
 
+    # Para que lea las imagenes de la carpeta
+    RewriteCond %{REQUEST_URI} ^/QuestionMark/view/img_page/ [NC]
+    RewriteRule .* - [L]
+
     RewriteRule ^(public)($|/) - [L,NC]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d

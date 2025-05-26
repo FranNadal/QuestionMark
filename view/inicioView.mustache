@@ -4,18 +4,31 @@
     <title>QuizMaster - Inicio</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
+    <!-- Fuente Roboto de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(to bottom, #f7f3fc, #ffffff);
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #F8F6FB, #F8F6FB);
+            font-size: 1.1rem;
         }
 
-        .main-title {
-            font-size: 48px;
-            font-weight: bold;
+        /* Ajusta el tamaño del logo */
+        .logo {
+            width: 320px;          /* Más grande */
+            max-width: 95vw;
+            height: auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 12px;   /* bordes redondeados para suavizar */
         }
+
+        .logo:hover {
+            transform: scale(1.05);       /* aumenta un poco al pasar el mouse */
+        }
+
 
         .subtitle {
-            font-size: 18px;
+            font-size: 25px;
             margin-bottom: 40px;
         }
 
@@ -29,8 +42,8 @@
         }
 
         @media (max-width: 600px) {
-            .main-title {
-                font-size: 32px;
+            .logo {
+                width: 180px;
             }
         }
     </style>
@@ -38,7 +51,9 @@
 <body class="w3-display-container w3-light-grey" style="height: 100vh;">
 
 <div class="w3-display-middle w3-center">
-    <h1 class="main-title w3-text-purple">QuestionMark</h1>
+    <!-- Aquí reemplazamos el texto por la imagen del logo -->
+    <img src="view/img_page/logo_login.png" alt="Logo QuestionMark" class="logo">
+
     <p class="subtitle">Juega, aprende y compite en nuestro juego de preguntas y respuestas</p>
 
     <div class="btn-container">

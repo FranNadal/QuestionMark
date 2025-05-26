@@ -8,8 +8,12 @@ Options -Indexes
     RewriteEngine On
     RewriteBase /QuestionMark/
 
-    # No reescribir peticiones a la carpeta de imágenes
+    # No reescribir peticiones a la carpeta de imágenes de página
     RewriteCond %{REQUEST_URI} ^/QuestionMark/view/img_page/ [NC]
+    RewriteRule .* - [L]
+
+    # No reescribir peticiones a la carpeta de imágenes de perfil
+    RewriteCond %{REQUEST_URI} ^/QuestionMark/img/profile/ [NC]
     RewriteRule .* - [L]
 
     RewriteRule ^(public)($|/) - [L,NC]
@@ -20,3 +24,4 @@ Options -Indexes
     RewriteRule ^(.*)/(.*)$ index.php?controller=$1&method=$2 [L,QSA]
     RewriteRule ^(.*)$ index.php?controller=$1 [L,QSA]
 </IfModule>
+

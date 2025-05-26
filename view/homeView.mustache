@@ -27,19 +27,112 @@
             color: red;
             font-weight: bold;
         }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #F8F6FB;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+        }
+        .navbar-logo {
+            flex: 1;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        .navbar-logo img {
+            height: 40px;
+        }
+        .navbar-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        .navbar-center a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            background-color: #6a1b9a;
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: 0.5px solid #ffffff;
+            font-size: 16px; /* o el tamaño que prefieras */
+            font-weight: bold;
+        }
+        .navbar-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        .navbar-right a, .navbar-right span {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .navbar-logo img {
+            transition: transform 0.1s ease;
+            cursor: pointer; /* para que cambie el cursor al pasar por encima */
+        }
+
+        .navbar-logo img:active {
+            transform: scale(0.9) translateY(2px);
+        }
+        .navbar-logo img {
+            transition: transform 0.1s ease;
+            cursor: pointer;
+        }
+
+        .navbar-logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-logo img:active {
+            transform: scale(0.9) translateY(2px);
+        }
+
+        .navbar-center a {
+            display: inline-block;
+            text-decoration: none;
+            color: #ffffff;
+            animation: jump 3s ease-in-out infinite;
+            animation-delay: 5s; /* espera inicial antes de empezar a saltar */
+        }
+
+        /* Animación */
+        @keyframes jump {
+            0%, 100% { transform: translateY(0); }
+            10% { transform: translateY(-5px); }
+            20% { transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
 <!-- Navbar superior -->
-<div class="w3-bar w3-theme w3-padding">
-    <span class="w3-bar-item w3-xlarge w3-text-white"><b>QuizMaster</b></span>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small">Inicio</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small">Jugar</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small">Ranking</a>
-    <a href="/QuestionMark/perfil/view" class="w3-bar-item w3-button w3-hide-small">Perfil</a>
-    <a href="/QuestionMark/login/logout" class="w3-bar-item w3-button w3-hide-small">Desconectarse</a>
-    <span class="w3-bar-item w3-right"><i class="fa fa-trophy"></i> 1250</span>
+<div class="w3-bar w3-theme navbar">
+    <div class="navbar-logo">
+        <a href="#"><img src="/QuestionMark/view/img_page/logo2.png" alt="Logo 2"></a>
+    </div>
+
+    <div class="navbar-center">
+        <a href="#">JUGAR</a>
+    </div>
+
+    <div class="navbar-right">
+        <a href="#">Ranking</a>
+        <a href="/QuestionMark/perfil/view">Perfil</a>
+        <a href="/QuestionMark/login/logout">Desconectarse</a>
+        <span><i class="fa fa-trophy"></i> Puntuación 1250</span>
+    </div>
 </div>
 
 <div class="w3-content" style="max-width:1200px; margin-top:30px;">

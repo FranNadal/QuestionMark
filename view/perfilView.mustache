@@ -125,6 +125,11 @@
                 <h2 class="w3-text-purple">{{nombre_completo}}</h2>
                 <p>{{nombre_usuario}}</p>
                 <span class="w3-tag w3-theme w3-round">{{rol}}</span>
+
+                <div class="w3-margin-top">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost/QuestionMark/perfil/view?user={{nombre_usuario}}" alt="Código QR del perfil">
+                </div>
+
             </div>
 
             <hr class="w3-border-purple">

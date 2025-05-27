@@ -16,6 +16,10 @@ Options -Indexes
     RewriteCond %{REQUEST_URI} ^/QuestionMark/img/profile/ [NC]
     RewriteRule .* - [L]
 
+    # Permitir acceso directo a la carpeta view/styles
+    RewriteCond %{REQUEST_URI} ^/QuestionMark/view/styles/ [NC]
+    RewriteRule .* - [L]
+
     RewriteRule ^(public)($|/) - [L,NC]
 
     RewriteCond %{REQUEST_FILENAME} !-f

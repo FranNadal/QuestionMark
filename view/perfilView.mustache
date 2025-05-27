@@ -5,181 +5,25 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/QuestionMark/view/styles/headerStyles.css">
+    <link rel="stylesheet" href="/QuestionMark/view/styles/perfilViewStyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Gabarito&display=swap" rel="stylesheet">
+
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to bottom, #f7f3fc, #ffffff);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .perfil-container {
-            max-width: 800px;
-            margin: auto;
-        }
-        .perfil-img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-        }
-        /* Navbar consistente con el lobby */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0;
-        }
-        .navbar-logo {
-            flex: 1;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 10px 20px;
-        }
-        .navbar-logo img {
-            height: 40px;
-            transition: transform 0.1s ease;
-            cursor: pointer;
-        }
-        .navbar-logo img:hover {
-            transform: scale(1.05);
-        }
-        .navbar-logo img:active {
-            transform: scale(0.9) translateY(2px);
-        }
-        .navbar-center {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-        }
-        .navbar-center a {
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            background-color: #6a1b9a;
-            padding: 8px 16px;
-            border-radius: 5px;
-            border: 0.5px solid #ffffff; /* Borde de medio píxel */
-            font-size: 16px; /* o el tamaño que prefieras */
-            font-weight: bold;
-        }
-        .navbar-right {
-            flex: 1;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px 20px;
-        }
-        .navbar-right a, .navbar-right span {
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-        .navbar-center a {
-            display: inline-block;
-            text-decoration: none;
-            color: #ffffff;
-            animation: jump 3s ease-in-out infinite;
-            animation-delay: 5s; /* espera inicial antes de empezar a saltar */
-        }
-
-        /* Animación */
-        @keyframes jump {
-            0%, 100% { transform: translateY(0); }
-            10% { transform: translateY(-5px); }
-            20% { transform: translateY(0); }
-        }
-
-        .perfil-qr-container {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 1rem;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-        .flip-card {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .flip-card.flipped {
-            transform: rotateY(180deg);
-        }
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 12.2%;
-            backface-visibility: hidden;
-            border: 3px solid purple;
-        }
-        .flip-card-front img, .flip-card-back img {
-            width: 100%;
-            height: 100%;
-            border-radius: 10%;
-            object-fit: cover;
-            display: block;
-        }
-        .flip-card-back {
-            transform: rotateY(180deg);
-            background: white;
-        }
-
-        @keyframes click {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(4px);
-            }
-        }
-
-        #indicador-puntero {
-            position: fixed;
-            bottom: -27px;  /* distancia del borde inferior */
-            right: -30px;   /* distancia del borde derecho */
-            width: 70px;   /* ajusta el tamaño que necesites */
-            height: auto;
-            z-index: 1000; /* para que esté por encima de otros elementos */
-            pointer-events: none;
-            animation: click 1.5s ease-in-out infinite;
-            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
-        }
-
     </style>
 </head>
+
 <body>
 
-<!-- Navbar superior -->
-<div class="w3-bar w3-theme navbar">
-    <div class="navbar-logo">
-        <a href="/QuestionMark/home/view"><img src="/QuestionMark/view/img_page/logo2.png" alt="Logo"></a>
-    </div>
-    <div class="navbar-center">
-        <a href="#">JUGAR</a>
-    </div>
-    <div class="navbar-right">
-        <a href="#">Ranking</a>
-        <a href="/QuestionMark/perfil/view">Perfil</a>
-        <a href="/QuestionMark/login/logout">Desconectarse</a>
-        <span><i class="fa fa-trophy"></i> Puntuación 1250</span>
-    </div>
-</div>
+{{> header}}
+
+<div class="w3-content" style="max-width:1200px; margin-top:30px;">
 
 {{#datos}}
     <form method="POST" action="/QuestionMark/perfil/guardar" enctype="multipart/form-data" class="w3-container w3-padding-32 perfil-container">
-    <div class="w3-card w3-white w3-round-large w3-padding-large">
-            <div class="w3-center">
+    <div class="w3-card w3-white w3-round-large perfil-card">
+            <div class="w3-center perfil-fondo">
                 <div class="perfil-qr-container" id="perfilQrContainer" title="Click para mostrar código QR">
                     <div class="flip-card" id="flipCard">
                         <div class="flip-card-front">
@@ -193,9 +37,10 @@
 
                 </div>
 
-                <h2 class="w3-text-purple">{{nombre_completo}}</h2>
-                <p>{{nombre_usuario}}</p>
-                <span class="w3-tag w3-theme w3-round">{{rol}}</span>
+                <h2 class="w3-text-purple" style="font-family: 'Gabarito', sans-serif; font-weight: bold;">{{nombre_completo}}</h2>
+                <p style="font-weight: bold;">{{nombre_usuario}}</p>
+                <span class="w3-tag w3-theme w3-round" style="font-weight: bold;">{{rol}}</span>
+
 
             </div>
 
@@ -268,12 +113,20 @@
                 {{/edicion_perfil}}
 
                 {{^edicion_perfil}}
-                    <a href="/QuestionMark/perfil/editar" class="w3-button w3-purple w3-round-large">Editar perfil</a>
+                    <div class="editar-perfil-icon">
+                        <a href="/QuestionMark/perfil/editar">
+                            <img src="/QuestionMark/view/img_page/editar_perfil2.png" alt="Editar perfil">
+                        </a>
+                    </div>
                 {{/edicion_perfil}}
+
+
             </div>
         </div>
     </form>
 {{/datos}}
+</div>
+
 <script>
     document.getElementById('perfilQrContainer').addEventListener('click', function () {
         document.getElementById('flipCard').classList.toggle('flipped');

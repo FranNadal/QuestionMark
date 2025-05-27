@@ -97,6 +97,65 @@
             10% { transform: translateY(-5px); }
             20% { transform: translateY(0); }
         }
+
+        .perfil-qr-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .flip-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 12.2%;
+            backface-visibility: hidden;
+            border: 3px solid purple;
+        }
+        .flip-card-front img, .flip-card-back img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10%;
+            object-fit: cover;
+            display: block;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background: white;
+        }
+
+        @keyframes click {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(4px);
+            }
+        }
+
+        #indicador-puntero {
+            position: fixed;
+            bottom: -27px;  /* distancia del borde inferior */
+            right: -30px;   /* distancia del borde derecho */
+            width: 70px;   /* ajusta el tamaño que necesites */
+            height: auto;
+            z-index: 1000; /* para que esté por encima de otros elementos */
+            pointer-events: none;
+            animation: click 1.5s ease-in-out infinite;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
+        }
+
     </style>
 </head>
 <body>
@@ -121,14 +180,22 @@
     <form method="POST" action="/QuestionMark/perfil/guardar" enctype="multipart/form-data" class="w3-container w3-padding-32 perfil-container">
     <div class="w3-card w3-white w3-round-large w3-padding-large">
             <div class="w3-center">
-                <img src="/QuestionMark/{{foto_perfil}}" alt="Foto de perfil" class="w3-circle perfil-img w3-border w3-border-purple">
+                <div class="perfil-qr-container" id="perfilQrContainer" title="Click para mostrar código QR">
+                    <div class="flip-card" id="flipCard">
+                        <div class="flip-card-front">
+                            <img src="/QuestionMark/{{foto_perfil}}" alt="Foto de perfil" class="w3-circle perfil-img">
+                        </div>
+                        <div class="flip-card-back">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=http://localhost/QuestionMark/perfil/view?user={{nombre_usuario}}" alt="Código QR del perfil">
+                        </div>
+                    </div>
+                    <img src="/QuestionMark/view/img_page/indicador.png" alt="Indicador" id="indicador-puntero">
+
+                </div>
+
                 <h2 class="w3-text-purple">{{nombre_completo}}</h2>
                 <p>{{nombre_usuario}}</p>
                 <span class="w3-tag w3-theme w3-round">{{rol}}</span>
-
-                <div class="w3-margin-top">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost/QuestionMark/perfil/view?user={{nombre_usuario}}" alt="Código QR del perfil">
-                </div>
 
             </div>
 
@@ -207,6 +274,10 @@
         </div>
     </form>
 {{/datos}}
-
+<script>
+    document.getElementById('perfilQrContainer').addEventListener('click', function () {
+        document.getElementById('flipCard').classList.toggle('flipped');
+    });
+</script>
 </body>
 </html>

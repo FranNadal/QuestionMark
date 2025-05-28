@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil de Usuario</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/QuestionMark/view/styles/headerStyles.css">
+    <link rel="stylesheet" href="/QuestionMark/view/styles/perfilViewStyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/QuestionMark/view/img_page/icono_pagina.ico" />
+
+
+</head>
+
+<body>
+
+{{> header}}
+<!-- CONTENIDO PRINCIPAL -->
+<div class="w3-container w3-card w3-round-large w3-padding" style="border-top: 5px solid {{color_categoria}};">
+    <h2 class="w3-text" style="color: {{color_categoria}};">Categoría: {{pregunta.categoria}}</h2>
+
+    <div class="w3-container w3-light-grey w3-round-large w3-padding">
+        <p><strong>Puntaje actual:</strong> <span id="puntaje-actual">{{puntaje_actual}}</span></p>
+        <p><strong>Tiempo restante:</strong> <span id="timer">01:00</span></p>
+
+        <h3>{{pregunta.texto}}</h3>
+
+        <form action="/jugar/responder" method="POST" class="w3-container w3-margin-top">
+            <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
+
+            <button class="w3-button w3-block w3-theme w3-round-large w3-margin-top" type="submit" name="respuesta" value="A">
+                A) {{pregunta.opcion_a}}
+            </button>
+            <button class="w3-button w3-block w3-theme w3-round-large w3-margin-top" type="submit" name="respuesta" value="B">
+                B) {{pregunta.opcion_b}}
+            </button>
+            <button class="w3-button w3-block w3-theme w3-round-large w3-margin-top" type="submit" name="respuesta" value="C">
+                C) {{pregunta.opcion_c}}
+            </button>
+            <button class="w3-button w3-block w3-theme w3-round-large w3-margin-top" type="submit" name="respuesta" value="D">
+                D) {{pregunta.opcion_d}}
+            </button>
+        </form>
+
+        <form action="/jugar/reporte" method="POST" class="w3-container w3-margin-top">
+            <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
+            <label for="motivo" class="w3-margin-top">¿Reportar pregunta inválida?</label>
+            <textarea class="w3-input w3-border w3-round-large w3-margin-top" name="motivo" id="motivo" placeholder="Escribe aquí el motivo..." required></textarea>
+            <button class="w3-button w3-red w3-round-large w3-margin-top" type="submit">Enviar reporte</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL FINAL -->
+<div id="modalFin" class="w3-modal">
+    <div class="w3-modal-content w3-animate-top w3-center w3-padding">
+        <span onclick="document.getElementById('modalFin').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <h2>¡Se terminó el juego!</h2>
+        <p>Tu puntaje final es: <span id="puntaje-final"></span></p>
+        <button class="w3-button w3-theme w3-round-large" onclick="window.location.reload()">Volver a jugar</button>
+    </div>
+</div>
+
+<!-- SCRIPT DEL TEMPORIZADOR -->
+<script>
+    let timeLeft = 60; // 60 segundos
+    const timerEl = document.getElementById('timer');
+    const puntajeActualEl = document.getElementById('puntaje-actual');
+    const puntajeFinalEl = document.getElementById('puntaje-final');
+
+    const countdown = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        timeLeft--;
+
+        if (timeLeft < 0) {
+            clearInterval(countdown);
+            puntajeFinalEl.textContent = puntajeActualEl.textContent;
+            document.getElementById('modalFin').style.display = 'block';
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>

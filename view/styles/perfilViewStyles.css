@@ -5,12 +5,13 @@ html, body {
     padding: 0;
 }
 body {
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(to bottom, #f7f3fc, #ffffff);
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(to bottom, #f7f3fc, #f7f3fc);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+
 .perfil-container {
     max-width: 800px;
     margin: auto;
@@ -56,7 +57,7 @@ body {
 }
 .flip-card-back {
     transform: rotateY(180deg);
-    background: white;
+    background: #9c27b0;
 }
 
 @keyframes click {
@@ -101,17 +102,70 @@ body {
 .editar-perfil-icon img {
     width: 40px;
     height: auto;
+    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
 }
 
 .perfil-card {
-    position: relative; /* Esto es clave para que el absoluto funcione dentro */
+    position: relative; /* ya lo tenés */
+}
+
+/* Estilo del botón */
+.btn-editar-perfil {
+    position: absolute;
+    top: 10px;      /* distancia desde arriba, ajustalo a tu gusto */
+    right: 10px;    /* distancia desde la derecha, ajustalo a tu gusto */
+
+    display: inline-flex;
+    align-items: center;
+    color: #9c27b0;
+    border: none;
+    border-radius: 30px;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    cursor: pointer; /* si es un botón clickeable */
+    z-index: 10;    /* para que quede arriba de otros elementos */
+    border: 2px solid #9c27b0;
+}
+
+.btn-editar-perfil img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    transition: filter 1s;
+}
+
+.btn-editar-perfil:hover {
+    opacity: 70%;
+    transition: opacity 0.3s;
+}
+
+h1, h2, h3, h4, h5, h6, p, b, strong, span {
+    font-family: 'Nunito', sans-serif;
 }
 
 
-hr.w3-border-purple {
-    height: 2px;      /* Grosor de la línea */
-    width: 90%;       /* Ancho relativo al contenedor */
-    margin: 10px auto; /* Para centrar y separar verticalmente */
+
+.nunito-400 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 }
 
+.nunito-600 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
 
+.nunito-800 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}

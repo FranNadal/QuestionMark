@@ -8,10 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/QuestionMark/view/styles/headerStyles.css">
     <link rel="stylesheet" href="/QuestionMark/view/styles/perfilViewStyles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Gabarito&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
 
-    <style>
-    </style>
 </head>
 
 <body>
@@ -37,8 +35,8 @@
 
                 </div>
 
-                <h2 class="w3-text-purple" style="font-family: 'Gabarito', sans-serif; font-weight: bold;">{{nombre_completo}}</h2>
-                <p style="font-weight: bold;">{{nombre_usuario}}</p>
+                <h2 class="w3-text-purple" style="font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 32px;">{{nombre_completo}}</h2>
+                <p style="font-weight: 600; font-size: 16px;">{{nombre_usuario}}</p>
                 <span class="w3-tag w3-theme w3-round" style="font-weight: bold;">{{rol}}</span>
 
 
@@ -113,12 +111,13 @@
                 {{/edicion_perfil}}
 
                 {{^edicion_perfil}}
-                    <div class="editar-perfil-icon">
-                        <a href="/QuestionMark/perfil/editar">
-                            <img src="/QuestionMark/view/img_page/editar_perfil2.png" alt="Editar perfil">
-                        </a>
-                    </div>
+                    <a href="/QuestionMark/perfil/editar" class="btn-editar-perfil">
+                        <img src="/QuestionMark/view/img_page/personalizar-editar.png" alt="Editar perfil">
+                        Editar mi perfil
+                    </a>
+
                 {{/edicion_perfil}}
+
 
 
             </div>

@@ -3,7 +3,10 @@
     justify-content: space-between;
     align-items: center;
     padding: 0;
+    font-family: 'Nunito', sans-serif;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5); /* Sombra suave */
 }
+.w3-bar.navbar{ background-color: rgba(146, 16, 167, 0.9) !important; /* color lavanda intenso */}
 .navbar-logo {
     flex: 1;
     display: flex;
@@ -13,6 +16,8 @@
 }
 .navbar-logo img {
     height: 40px;
+    transition: transform 0.1s ease;
+    cursor: pointer;
 }
 .navbar-center {
     flex: 1;
@@ -20,16 +25,20 @@
     justify-content: center;
 }
 .navbar-center a {
+    display: inline-block;
     text-decoration: none;
-    color: white;
-    font-weight: bold;
+    color: #ffffff;
     background-color: #6a1b9a;
     padding: 8px 16px;
     border-radius: 5px;
     border: 0.5px solid #ffffff;
-    font-size: 16px; /* o el tamaño que prefieras */
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
     font-weight: bold;
+    animation: jump 3s ease-in-out infinite;
+    animation-delay: 5s;
 }
+
 .navbar-right {
     flex: 1;
     display: flex;
@@ -44,17 +53,8 @@
     margin-left: 10px;
 }
 
-.navbar-logo img {
-    transition: transform 0.1s ease;
-    cursor: pointer; /* para que cambie el cursor al pasar por encima */
-}
-
 .navbar-logo img:active {
     transform: scale(0.9) translateY(2px);
-}
-.navbar-logo img {
-    transition: transform 0.1s ease;
-    cursor: pointer;
 }
 
 .navbar-logo img:hover {
@@ -65,17 +65,63 @@
     transform: scale(0.9) translateY(2px);
 }
 
-.navbar-center a {
-    display: inline-block;
-    text-decoration: none;
+.puntuacion-text {
+    font-size: 16px;
+    font-weight: bold;
     color: #ffffff;
-    animation: jump 3s ease-in-out infinite;
-    animation-delay: 5s; /* espera inicial antes de empezar a saltar */
 }
 
-/* Animación */
+
+
 @keyframes jump {
     0%, 100% { transform: translateY(0); }
     10% { transform: translateY(-5px); }
     20% { transform: translateY(0); }
+}
+
+/* iconos*/
+
+.icon-circle {
+    display: inline-block;
+    width: 40px; /* ajustalo a tu gusto */
+    height: 40px;
+    border-radius: 50%;
+    background-color: #480f51; /* color de fondo de los círculos */
+    text-align: center;
+    line-height: 40px; /* centrar verticalmente */
+    margin: 0 5px; /* separación entre iconos */
+    overflow: hidden; /* para que la imagen no se desborde */
+}
+
+.icon-circle img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.icon-circle:hover img {
+    opacity: 70%;
+    transition: opacity 0.3s;
+}
+
+
+.nunito-400 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.nunito-600 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.nunito-800 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
 }

@@ -1,0 +1,61 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(to bottom, #F8F6FB, #F8F6FB);
+    font-size: 1.1rem;
+}
+
+/* Ajusta el tamaño del logo */
+.logo {
+    width: 400px;
+    max-width: 95vw;
+    height: auto;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: drop-shadow(-1px 1px 1px rgba(0, 0, 0, 0.5)); /* Sombra que respeta el contorno de la imagen */
+}
+
+.logo:hover {
+    transform: scale(1.05);       /* aumenta un poco al pasar el mouse */
+}
+
+
+.subtitle {
+    font-size: 25px;
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+
+.btn-container button {
+    margin: 0 10px;
+}
+
+.admin-link {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .logo {
+        width: 180px;
+    }
+}
+
+.nunito-400 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.nunito-600 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.nunito-800 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}

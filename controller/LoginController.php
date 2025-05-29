@@ -42,6 +42,8 @@ class LoginController
         }else{
             session_start();
             $_SESSION['user'] = $resultado["nombre_usuario"];
+            $_SESSION['id_usuario'] = $resultado["id_usuario"];
+
             $this->redirectTo("/QuestionMark/home/view");
         }
     }

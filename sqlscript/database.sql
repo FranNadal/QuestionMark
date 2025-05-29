@@ -45,15 +45,7 @@ CREATE TABLE pregunta (
                           FOREIGN KEY (creada_por) REFERENCES usuario(id_usuario)
 );
 
--- Tabla preguntas_partida (relación entre partidas y preguntas)
-CREATE TABLE preguntas_partida (
-                                   id_pregunta_partida INT AUTO_INCREMENT PRIMARY KEY,
-                                   id_partida INT NOT NULL,
-                                   id_pregunta INT NOT NULL,
-                                   respondida_correctamente BOOLEAN,
-                                   FOREIGN KEY (id_partida) REFERENCES partida(id_partida),
-                                   FOREIGN KEY (id_pregunta) REFERENCES pregunta(id_pregunta)
-);
+
 
 -- Tabla reporte_pregunta (para reportes de usuarios)
 CREATE TABLE reporte_pregunta (

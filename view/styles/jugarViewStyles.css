@@ -1,0 +1,131 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(to bottom, #F8F6FB, #F8F6FB);
+    font-size: 1.1rem;
+}
+
+.w3-container{
+    border-top: 0px;
+}
+.contenedor-partida {
+    color: white;
+    font-weight: bold;
+    font-size: 200%;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    position: relative;
+}
+.categoria {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.info {
+    position: absolute;
+    bottom: 27.5%;
+    right: 20px; /* Lo dejamos como estaba para que el contenedor siga en la esquina */
+    text-align: left; /* Alineamos el contenido interno a la izquierda */
+    font-size: 20px;
+}
+
+.info p {
+    margin: 0; /* Para que no haya separación extra */
+    padding: 0;
+    display: flex; /* Para que la imagen toque el borde izquierdo */
+    align-items: center; /* Centra verticalmente el ícono y el texto */
+    gap: 5px; /* Opcional, espacio entre ícono y texto */
+}
+
+
+.categoria h2 {
+    color: white;
+    font-weight: bold;
+    font-size: 200%;
+}
+
+
+.categoria-img {
+    position: absolute;
+    top: 50%;
+    left: 100px;
+    transform: translateY(-50%);
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.5;
+}
+
+.info-icono {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.barra-tiempo-container {
+    width: 100%;      /* Que ocupe todo el ancho */
+    height: 10px;     /* Alto de la barra */
+    background-color: #ddd;  /* Color de fondo de la barra contenedora */
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.barra-tiempo {
+    height: 10px;
+    width: 100%;
+    border-radius: 3px;
+    transition: width 1s linear;
+}
+.contenedor-h3 {
+    display: flex;
+    justify-content: center; /* centro horizontal */
+    align-items: center;    /* centro vertical, si tiene altura */
+    height: 100px;          /* por ejemplo */
+}
+
+h3 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 200%;
+    font-family: 'Nunito', sans-serif;
+}
+
+.form-respuestas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.boton-respuesta {
+    width: 100%;
+    height: 60px;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 20px;
+    border-radius: 10px;
+    background-color: #9a27ae; /* color base, lo podés personalizar */
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.boton-respuesta:hover {
+    background-color: #6a1b9a;
+}
+
+
+
+
+

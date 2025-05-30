@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/QuestionMark/view/styles/headerStyles.css">
-    <link rel="stylesheet" href="/QuestionMark/view/styles/perfilViewStyles.css">
+    <link rel="stylesheet" href="/QuestionMark/view/styles/jugarViewStyles.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/QuestionMark/view/img_page/icono_pagina.ico" />
 
@@ -18,28 +18,52 @@
 
 {{> header}}
 <!-- CONTENIDO PRINCIPAL -->
-<div class="w3-container w3-card w3-round-large w3-padding" style="border-top: 5px solid {{color_categoria}};">
-    <h2 class="w3-text" style="color: {{color_categoria}};">Categoría: {{pregunta.categoria}}</h2>
+<div class="w3-container w3-card w3-round-large w3-padding" style="">
+
+    <div class="contenedor-partida" style="background-color: {{color_categoria}};">
+        <div class="categoria">
+            <h2>{{pregunta.categoria}}</h2>
+        </div>
+
+        <div class="info">
+            <p>
+                <img src="/QuestionMark/view/img_page/marcas.png" alt="Puntaje" class="info-icono" />
+                <strong></strong> <span id="puntaje-actual">{{puntaje_actual}}</span>
+            </p>
+            <p>
+                <img src="/QuestionMark/view/img_page/reloj.png" alt="Tiempo" class="info-icono" />
+                <strong></strong> <span id="timer">60"</span>
+            </p>
+        </div>
+
+        <img src="/QuestionMark/view/img_page/{{pregunta.categoria}}.png" alt="{{pregunta.categoria}}" class="categoria-img" />
+    </div>
+
+    <div class="barra-tiempo" id="barra-tiempo" style="background-color: {{color_categoria}};"></div>
+
 
     <div class="w3-container w3-light-grey w3-round-large w3-padding">
-        <p><strong>Puntaje actual:</strong> <span id="puntaje-actual">{{puntaje_actual}}</span></p>
-        <p><strong>Tiempo restante:</strong> <span id="timer">01:00</span></p>
 
-        <h3>{{pregunta.texto}}</h3>
 
-        <form action="/QuestionMark/jugar/responder" method="POST" class="w3-container w3-margin-top">
+        <div class="contenedor-h3"><h3>{{pregunta.texto}}</h3></div>
+
+
+        <form action="/QuestionMark/jugar/responder" method="POST" class="form-respuestas">
             <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
 
-            <button class="w3-button w3-block w3-theme w3-round-large w3-margin-top" type="submit" name="respuesta" value="A">
+            <button type="submit" name="respuesta" value="A" class="boton-respuesta">
                 A) {{pregunta.opcion_a}}
             </button>
-            <button class="w3-button w3-block w3-theme w3-round-large w3-margin-top" type="submit" name="respuesta" value="B">
+
+            <button type="submit" name="respuesta" value="B" class="boton-respuesta">
                 B) {{pregunta.opcion_b}}
             </button>
-            <button class="w3-button w3-block w3-theme w3-round-large w3-margin-top" type="submit" name="respuesta" value="C">
+
+            <button type="submit" name="respuesta" value="C" class="boton-respuesta">
                 C) {{pregunta.opcion_c}}
             </button>
-            <button class="w3-button w3-block w3-theme w3-round-large w3-margin-top" type="submit" name="respuesta" value="D">
+
+            <button type="submit" name="respuesta" value="D" class="boton-respuesta">
                 D) {{pregunta.opcion_d}}
             </button>
         </form>
@@ -66,23 +90,38 @@
 
 <!-- SCRIPT DEL TEMPORIZADOR -->
 <script>
-    let timeLeft = 60; // 60 segundos
+    let timeLeft = 59; // 60 segundos (de 59 a 0)
+    const totalTime = 59;
+
     const timerEl = document.getElementById('timer');
+    const barraTiempo = document.getElementById('barra-tiempo');
     const puntajeActualEl = document.getElementById('puntaje-actual');
     const puntajeFinalEl = document.getElementById('puntaje-final');
 
+    function actualizarContadorYBarra() {
+        let segundosFormateados = timeLeft < 10 ? "0" + timeLeft : timeLeft;
+        timerEl.textContent = `${segundosFormateados}"`;
+
+        let porcentaje = (timeLeft / totalTime) * 100;
+        barraTiempo.style.width = porcentaje + "%";
+    }
+
+    // **Actualización inicial para que se vea sincronizado al cargar**
+    actualizarContadorYBarra();
+
     const countdown = setInterval(() => {
-        let minutes = Math.floor(timeLeft / 60);
-        let seconds = timeLeft % 60;
-        timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         timeLeft--;
 
         if (timeLeft < 0) {
             clearInterval(countdown);
             puntajeFinalEl.textContent = puntajeActualEl.textContent;
             document.getElementById('modalFin').style.display = 'block';
+        } else {
+            actualizarContadorYBarra();
         }
     }, 1000);
+
+
 
     // Mostrar modal si viene del backend (partida perdida)
     window.onload = function() {

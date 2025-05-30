@@ -43,11 +43,11 @@ private $database;
         $colores = [
             'Historia'   => '#FF5733',  // naranja
             'Ciencia'    => '#33B5FF',  // azul
-            'Deportes'   => '#33FF57',  // verde
+            'Deportes'   => '#0b842e',  // verde
             'Arte'       => '#C700FF',  // violeta
             'Geografía'  => '#FFC300',  // amarillo
             'Matemática' => '#FF33A8',  // rosa fuerte
-            'Literatura' => '#8E44AD',  // púrpura oscuro
+            'Literatura' => '#FF0000',  // rojo
             'Cultura'    => '#16A085'   // verde azulado
         ];
         return $colores[$categoria] ?? '#999999';  // gris por defecto

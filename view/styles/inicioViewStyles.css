@@ -1,8 +1,13 @@
 body {
     font-family: 'Nunito', sans-serif;
-    background: linear-gradient(to bottom, #F8F6FB, #F8F6FB);
     font-size: 1.1rem;
+    background-image: url('/QuestionMark/view/img_page/page_backgraund.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
+
+
 
 /* Ajusta el tamaño del logo */
 .logo {

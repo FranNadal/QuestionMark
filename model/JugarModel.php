@@ -100,4 +100,59 @@ $this->database->execute($sql, [$id_usuario, $fecha_inicio, $fecha_fin, $puntaje
         $sql = "DELETE FROM preguntas_jugadas WHERE id_usuario = ?";
         $this->database->execute($sql, [$id_usuario]);
     }
+
+    public function actualizarEstadisticasUsuario($id_usuario, $acierto) {
+        $this->crearSiNoExisteUsuarioEstadistica($id_usuario);
+
+        $sql = "UPDATE usuario_estadisticas 
+            SET preguntas_respondidas = preguntas_respondidas + 1" .
+            ($acierto ? ", respuestas_correctas = respuestas_correctas + 1" : "") . "
+            WHERE id_usuario = ?";
+        $this->database->execute($sql, [$id_usuario]);
+    }
+
+    public function crearSiNoExisteUsuarioEstadistica($id_usuario) {
+        $sql = "INSERT IGNORE INTO usuario_estadisticas (id_usuario) VALUES (?)";
+        $this->database->execute($sql, [$id_usuario]);
+    }
+
+    public function actualizarEstadisticasPregunta($id_pregunta, $acierto) {
+        $this->crearSiNoExistePreguntaEstadistica($id_pregunta);
+
+        $sql = "UPDATE pregunta_estadisticas 
+            SET veces_respondida = veces_respondida + 1" .
+            ($acierto ? ", veces_acertada = veces_acertada + 1" : "") . "
+            WHERE id_pregunta = ?";
+        $this->database->execute($sql, [$id_pregunta]);
+
+        $dificultad = $this->calcularDificultad($id_pregunta);
+
+        if ($dificultad !== 'Sin datos') {
+            $sql = "UPDATE preguntas_juego SET dificultad = ? WHERE id_pregunta = ?";
+            $this->database->execute($sql, [$dificultad, $id_pregunta]);
+        }
+    }
+
+
+    public function crearSiNoExistePreguntaEstadistica($id_pregunta) {
+        $sql = "INSERT IGNORE INTO pregunta_estadisticas (id_pregunta) VALUES (?)";
+        $this->database->execute($sql, [$id_pregunta]);
+    }
+
+    public function calcularDificultad($id_pregunta) {
+        $datos = $this->database->fetchOne("SELECT veces_respondida, veces_acertada FROM pregunta_estadisticas WHERE id_pregunta = ?", [$id_pregunta]);
+
+        if ($datos && $datos['veces_respondida'] > 0) {
+            $ratio = $datos['veces_acertada'] / $datos['veces_respondida'];
+
+            if ($ratio >= 0.7) return 'Fácil';
+            elseif ($ratio <= 0.3) return 'Difícil';
+            else return 'Media';
+        }
+
+
+
+        return 'Sin datos';
+    }
+
 }

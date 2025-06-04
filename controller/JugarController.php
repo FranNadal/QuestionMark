@@ -69,7 +69,7 @@ class JugarController
             $tiempo_transcurrido = time() - $_SESSION['tiempo_inicio_pregunta'];
             if ($tiempo_transcurrido > $this->tiempoLimite) {
                 $this->terminarPartidaPorTiempo();
-                exit();  // o return para salir de la función
+                exit();
             }
         }
 
@@ -81,6 +81,7 @@ class JugarController
             $_SESSION['puntaje'] = 0;
         }
 
+        $id_usuario = $_SESSION['id_usuario'];
         $id_pregunta = $_POST['id_pregunta'] ?? null;
         $respuesta = $_POST['respuesta'] ?? null;
 
@@ -96,10 +97,14 @@ class JugarController
             exit;
         }
 
-        if (strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta)) {
-            $_SESSION['puntaje'] += 1;
+        $acierto = strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta);
 
-            // Reinicio el tiempo para la próxima pregunta
+        // ⚠️ Ahora sí: Actualizás estadísticas después de determinar si fue acierto
+        $this->model->actualizarEstadisticasUsuario($id_usuario, $acierto);
+        $this->model->actualizarEstadisticasPregunta($id_pregunta, $acierto);
+
+        if ($acierto) {
+            $_SESSION['puntaje'] += 1;
             $_SESSION['tiempo_inicio_pregunta'] = time();
 
             header("Location: /QuestionMark/jugar/view");
@@ -108,6 +113,7 @@ class JugarController
             $this->terminarPartida();
         }
     }
+
 
 
     private function terminarPartida()
@@ -136,7 +142,6 @@ class JugarController
         $this->view->render('jugar', $datos);
     }
 
-// Nuevo método para terminar la partida por tiempo agotado
     private function terminarPartidaPorTiempo() {
 
         $this->verificarSesionActiva();

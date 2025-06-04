@@ -62,6 +62,30 @@ CREATE TABLE reporte_pregunta (
                                   FOREIGN KEY (id_pregunta) REFERENCES preguntas_juego(id_pregunta),
                                   FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
+-- Tabla con las preguntas que se han realizado (mostrado en pantalla)
+CREATE TABLE `preguntas_jugadas` (
+                                     `id` int(11) NOT NULL AUTO_INCREMENT,
+                                     `id_usuario` int(11) NOT NULL,
+                                     `id_pregunta` int(11) NOT NULL,
+                                     `fecha_jugada` datetime DEFAULT current_timestamp(),
+                                     PRIMARY KEY (`id`)
+)
+-- Tabla de conteo de preguntas que se utiliza para sacar el ratio
+CREATE TABLE `pregunta_estadisticas` (
+                                         `id_pregunta` int(11) NOT NULL,
+                                         `veces_respondida` int(11) NOT NULL DEFAULT 0,
+                                         `veces_acertada` int(11) NOT NULL DEFAULT 0,
+                                         PRIMARY KEY (`id_pregunta`),
+                                         FOREIGN KEY (`id_pregunta`) REFERENCES `preguntas_juego` (`id_pregunta`)
+)
+-- Tabla de conteo de preguntas respondidas y acertadas del usuario que se utiliza para sacar el ratio
+CREATE TABLE `usuario_estadisticas` (
+                                        `id_usuario` int(11) NOT NULL,
+                                        `preguntas_respondidas` int(11) NOT NULL DEFAULT 0,
+                                        `respuestas_correctas` int(11) NOT NULL DEFAULT 0,
+                                        PRIMARY KEY (`id_usuario`),
+                                        FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+)
 
 
 

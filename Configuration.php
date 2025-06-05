@@ -13,6 +13,8 @@ require_once("controller/LoginController.php");
 require_once("controller/PerfilController.php");
 require_once("controller/JugarController.php");
 
+
+
 require_once("model/GroupModel.php");
 require_once("model/SongModel.php");
 require_once("model/TourModel.php");
@@ -71,6 +73,7 @@ class Configuration
     {
         return new JugarController(new JugarModel($this->getDatabase()), $this->getViewer());
     }
+
     public function getGroupController()
     {
         return new GroupController(new GroupModel($this->getDatabase()), $this->getViewer());

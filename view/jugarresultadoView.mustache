@@ -10,18 +10,25 @@
     <link rel="stylesheet" href="/QuestionMark/view/styles/jugarViewStyles.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/QuestionMark/view/img_page/icono_pagina.ico" />
-
-
+    <style>
+        body.modal-abierto {
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
 
 {{> header}}
-<div class="w3-container w3-card w3-round-large w3-padding" style="">
+
+<div class="w3-container w3-card w3-round-large w3-padding">
     <div class="contenedor-partida" style="background-color: {{color_categoria}};">
         <div class="categoria"><h2>{{pregunta.categoria}}</h2></div>
         <div class="info">
-            <p><img src="/QuestionMark/view/img_page/marcas.png" class="info-icono"> <span id="puntaje-actual">{{puntaje_actual}}</span></p>
+            <p>
+                <img src="/QuestionMark/view/img_page/marcas.png" class="info-icono">
+                <span id="puntaje-actual">{{puntaje_actual}}</span>
+            </p>
         </div>
         <img src="/QuestionMark/view/img_page/{{pregunta.categoria}}.png" class="categoria-img">
     </div>
@@ -39,11 +46,20 @@
         <div class="w3-margin-top">
             {{#es_correcta}}
                 <p class="w3-text-green"><strong>¡Respuesta correcta!</strong></p>
+                <a href="/QuestionMark/jugar/view" class="w3-button w3-theme w3-round-large">Siguiente pregunta</a>
             {{/es_correcta}}
 
-            <a href="/QuestionMark/jugar/view" class="w3-button w3-theme w3-round-large">Siguiente pregunta</a>
+            {{^es_correcta}}
+                <p class="w3-text-red"><strong>¡Respuesta incorrecta!</strong></p>
+
+                <button class="w3-button w3-theme w3-round-large" onclick="window.location.href='/QuestionMark/jugar/view'">Volver a jugar</button>
+            {{/es_correcta}}
         </div>
     </div>
 </div>
+
+
+</body>
+</html>
 
 

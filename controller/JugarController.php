@@ -64,10 +64,10 @@ class JugarController
     {
         $this->verificarSesionActiva();
 
-        // 1. Chequeo de timeout
+        // 1. Timeout
         if (isset($_SESSION['tiempo_inicio_pregunta'])) {
             $tiempo = time() - $_SESSION['tiempo_inicio_pregunta'];
-            if ($tiempo > $this->tiempoLimite) {          // fuera de tiempo
+            if ($tiempo > $this->tiempoLimite) {
                 $this->terminarPartidaPorTiempo();
                 return;
             }
@@ -78,44 +78,44 @@ class JugarController
         $id_pregunta = $_POST['id_pregunta'] ?? null;
         $respuesta   = $_POST['respuesta']   ?? null;
 
-        if (!$id_pregunta || !$respuesta) { header("Location: /QuestionMark/jugar/view"); exit; }
+        if (!$id_pregunta || !$respuesta) {
+            header("Location:/jugar");
+            exit;
+        }
 
-        // 3. Pregunta & corrección
+        // 3. Pregunta
         $pregunta = $this->model->getPreguntaById($id_pregunta);
         if (!$pregunta) {
             $this->terminarPartida();
             return;
         }
-        $acierto  = strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta);
-        if (!$acierto) {
-            $this->terminarPartida();
-            return;
-        }
 
-        // 4. Estadísticas
+        // 4. Corrección
+        $acierto = strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta);
+
+        // 5. Estadísticas
         $this->model->actualizarEstadisticasUsuario($id_usuario, $acierto);
         $this->model->actualizarEstadisticasPregunta($id_pregunta, $acierto);
-
-        // 5. Puntaje
+        // 6. Puntaje
         if (!isset($_SESSION['puntaje'])) {
             $_SESSION['puntaje'] = 0;
         }
-        if ($acierto) $_SESSION['puntaje']++;
+        if ($acierto) {
+            $_SESSION['puntaje']++;
+            $_SESSION['tiempo_inicio_pregunta'] = time();  // reinicia tiempo para la próxima
+        }
 
-        // 6. Preparar datos para la vista-resultado
-        $color_categoria = $this->model->getColorCategoria($pregunta['categoria']);
-        /* ------------------------------------------------------------------ */
-        /*  Armamos el arreglo de opciones marcado como correcta / elegida    */
-        /* ------------------------------------------------------------------ */
-
+        // 7. Mostrar resultado (sea correcta o incorrecta)
         $this->view->render('jugarresultado', [
-            'pregunta'        => $pregunta,
-            'puntaje_actual'  => $_SESSION['puntaje'],
-            'color_categoria' => $color_categoria,
-            'respuesta_elegida' => $respuesta,      // A-D
-            'es_correcta'       => $acierto 
+            'pregunta'          => $pregunta,
+            'puntaje_actual'    => $_SESSION['puntaje'],
+            'color_categoria'   => $this->model->getColorCategoria($pregunta['categoria']),
+            'es_correcta'       => $acierto,
         ]);
+
+
     }
+
 
     private function terminarPartidaConMensaje($mensaje) {
         $this->verificarSesionActiva();
@@ -134,7 +134,7 @@ class JugarController
         unset($_SESSION['tiempo_inicio_pregunta']);
         unset($_SESSION['preguntas_mostradas']);
 
-        $this->view->render('jugar', [
+        $this->view->render('jugarresultado', [
             'puntaje_final' => $puntaje,
             'mostrar_modal_fin' => true,
             'mensaje_fin' => $mensaje
@@ -155,13 +155,7 @@ class JugarController
     public function reporte(){
 
     }
-    private function claseOpcion(string $letra, string $respuestaElegida, string $respuestaCorrecta): string
-    {
-        // verde si es la correcta, rojo si es la elegida pero incorrecta
-        if ($letra === $respuestaCorrecta)      return 'respuesta-correcta';
-        if ($letra === $respuestaElegida)       return 'respuesta-incorrecta';
-        return ''; // las demás quedan neutras
-    }
+
 
 
 }

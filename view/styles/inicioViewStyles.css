@@ -15,11 +15,11 @@ body {
     max-width: 95vw;
     height: auto;
     transition: transform 0.3s ease, filter 0.3s ease;
-    filter: drop-shadow(-1px 1px 1px rgba(0, 0, 0, 0.5)); /* Sombra que respeta el contorno de la imagen */
+    filter: drop-shadow(-1px 1px 1px rgba(0, 0, 0, 0.5));
 }
 
 .logo:hover {
-    transform: scale(1.05);       /* aumenta un poco al pasar el mouse */
+    transform: scale(1.05);
 }
 
 

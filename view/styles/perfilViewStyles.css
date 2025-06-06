@@ -71,14 +71,17 @@ body {
 
 #indicador-puntero {
     position: fixed;
-    bottom: -27px;  /* distancia del borde inferior */
-    right: -30px;   /* distancia del borde derecho */
-    width: 70px;   /* ajusta el tamaño que necesites */
+    bottom: -3px;
+    right: -3px;
+    width: 30px;
     height: auto;
-    z-index: 1000; /* para que esté por encima de otros elementos */
+    z-index: 1000;
     pointer-events: none;
     animation: click 1.5s ease-in-out infinite;
     filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
+    background-color: #000000;
+    border: 1px solid #000000;
+    border-radius: 5px;       /* opcional, para bordes redondeados */
 }
 
 .perfil-fondo {
@@ -87,8 +90,8 @@ body {
     background-position: center;
     background-repeat: no-repeat;
 
-    /* Ajuste para que el fondo se vea pero no rompa el layout */
-    padding: 30px; /* Ajustá según tus necesidades */
+
+    padding: 30px;
 }
 
 .editar-perfil-icon {
@@ -106,14 +109,14 @@ body {
 }
 
 .perfil-card {
-    position: relative; /* ya lo tenés */
+    position: relative;
 }
 
 /* Estilo del botón */
 .btn-editar-perfil {
     position: absolute;
-    top: 10px;      /* distancia desde arriba, ajustalo a tu gusto */
-    right: 10px;    /* distancia desde la derecha, ajustalo a tu gusto */
+    top: 10px;
+    right: 10px;
 
     display: inline-flex;
     align-items: center;
@@ -126,8 +129,8 @@ body {
     font-weight: 600;
     font-size: 14px;
     transition: background-color 0.3s;
-    cursor: pointer; /* si es un botón clickeable */
-    z-index: 10;    /* para que quede arriba de otros elementos */
+    cursor: pointer;
+    z-index: 10;
     border: 2px solid #9c27b0;
 }
 

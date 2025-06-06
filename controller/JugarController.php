@@ -64,7 +64,7 @@ class JugarController
     {
         $this->verificarSesionActiva();
 
-        // 1. Timeout
+
         if (isset($_SESSION['tiempo_inicio_pregunta'])) {
             $tiempo = time() - $_SESSION['tiempo_inicio_pregunta'];
             if ($tiempo > $this->tiempoLimite) {
@@ -73,7 +73,6 @@ class JugarController
             }
         }
 
-        // 2. Datos básicos
         $id_usuario  = $_SESSION['id_usuario'];
         $id_pregunta = $_POST['id_pregunta'] ?? null;
         $respuesta   = $_POST['respuesta']   ?? null;
@@ -83,17 +82,15 @@ class JugarController
             exit;
         }
 
-        // 3. Pregunta
         $pregunta = $this->model->getPreguntaById($id_pregunta);
         if (!$pregunta) {
             $this->terminarPartida();
             return;
         }
 
-        // 4. Corrección
         $acierto = strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta);
 
-        // 5. Estadísticas
+
         $this->model->actualizarEstadisticasUsuario($id_usuario, $acierto);
         $this->model->actualizarEstadisticasPregunta($id_pregunta, $acierto);
         // 6. Puntaje
@@ -111,10 +108,6 @@ class JugarController
             ]);
         }
 
-        // 7. Mostrar resultado (sea correcta o incorrecta)
-
-
-        // 8. Si no acierta, termina la partida
         if (!$acierto) {
             $this->terminarPartida();
         }

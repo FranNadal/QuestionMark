@@ -4,9 +4,9 @@
     align-items: center;
     padding: 0;
     font-family: 'Nunito', sans-serif;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5); /* Sombra suave */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5); 
 }
-.w3-bar.navbar{ background-color: rgba(146, 16, 167, 0.9) !important; /* color lavanda intenso */}
+.w3-bar.navbar{ background-color: rgba(146, 16, 167, 0.9) !important;}
 .navbar-logo {
     flex: 1;
     display: flex;
@@ -83,14 +83,14 @@
 
 .icon-circle {
     display: inline-block;
-    width: 40px; /* ajustalo a tu gusto */
+    width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #480f51; /* color de fondo de los círculos */
+    background-color: #480f51;
     text-align: center;
-    line-height: 40px; /* centrar verticalmente */
-    margin: 0 5px; /* separación entre iconos */
-    overflow: hidden; /* para que la imagen no se desborde */
+    line-height: 40px;
+    margin: 0 5px;
+    overflow: hidden;
 }
 
 .icon-circle img {

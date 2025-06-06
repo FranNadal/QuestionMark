@@ -1,0 +1,37 @@
+body.modal-abierto {
+    overflow: hidden;
+}
+
+.modal {
+    display: block;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+    color: #d32f2f;
+}
+
+.modal-content p {
+    font-size: 1.2rem;
+    margin: 15px 0;
+}
+
+.modal-content .w3-button {
+    margin-top: 20px;
+}

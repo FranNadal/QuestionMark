@@ -90,10 +90,27 @@ class JugarController
 
         $acierto = strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta);
 
+        $respuesta_correcta = strtoupper($pregunta['respuesta_correcta']);
+        $texto_respuesta_correcta = '';
+
+        switch ($respuesta_correcta) {
+            case 'A':
+                $texto_respuesta_correcta = $pregunta['opcion_a'];
+                break;
+            case 'B':
+                $texto_respuesta_correcta = $pregunta['opcion_b'];
+                break;
+            case 'C':
+                $texto_respuesta_correcta = $pregunta['opcion_c'];
+                break;
+            case 'D':
+                $texto_respuesta_correcta = $pregunta['opcion_d'];
+                break;
+        }
 
         $this->model->actualizarEstadisticasUsuario($id_usuario, $acierto);
         $this->model->actualizarEstadisticasPregunta($id_pregunta, $acierto);
-        // 6. Puntaje
+
         if (!isset($_SESSION['puntaje'])) {
             $_SESSION['puntaje'] = 0;
         }
@@ -105,7 +122,10 @@ class JugarController
                 'puntaje_actual'    => $_SESSION['puntaje'],
                 'color_categoria'   => $this->model->getColorCategoria($pregunta['categoria']),
                 'es_correcta'       => $acierto,
+                'respuesta_correcta'        => $respuesta_correcta,
+                'texto_respuesta_correcta'  => $texto_respuesta_correcta,
             ]);
+
         }
 
         if (!$acierto) {

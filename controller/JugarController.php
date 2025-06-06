@@ -103,17 +103,21 @@ class JugarController
         if ($acierto) {
             $_SESSION['puntaje']++;
             $_SESSION['tiempo_inicio_pregunta'] = time();  // reinicia tiempo para la próxima
+            $this->view->render('jugarResultadoCorrecto', [
+                'pregunta'          => $pregunta,
+                'puntaje_actual'    => $_SESSION['puntaje'],
+                'color_categoria'   => $this->model->getColorCategoria($pregunta['categoria']),
+                'es_correcta'       => $acierto,
+            ]);
         }
 
         // 7. Mostrar resultado (sea correcta o incorrecta)
-        $this->view->render('jugarresultado', [
-            'pregunta'          => $pregunta,
-            'puntaje_actual'    => $_SESSION['puntaje'],
-            'color_categoria'   => $this->model->getColorCategoria($pregunta['categoria']),
-            'es_correcta'       => $acierto,
-        ]);
 
 
+        // 8. Si no acierta, termina la partida
+        if (!$acierto) {
+            $this->terminarPartida();
+        }
     }
 
 
@@ -134,7 +138,7 @@ class JugarController
         unset($_SESSION['tiempo_inicio_pregunta']);
         unset($_SESSION['preguntas_mostradas']);
 
-        $this->view->render('jugarresultado', [
+        $this->view->render('jugarResultadoIncorrecto', [
             'puntaje_final' => $puntaje,
             'mostrar_modal_fin' => true,
             'mensaje_fin' => $mensaje

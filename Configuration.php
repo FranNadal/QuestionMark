@@ -12,6 +12,7 @@ require_once("controller/RegisterController.php");
 require_once("controller/LoginController.php");
 require_once("controller/PerfilController.php");
 require_once("controller/JugarController.php");
+require_once("controller/ApiController.php");
 
 
 
@@ -50,7 +51,10 @@ class Configuration
             $this->getViewer()
         );
     }
-
+    public function getApiController()
+    {
+        return new ApiController();
+    }
     public function getTourController()
     {
         return new TourController(

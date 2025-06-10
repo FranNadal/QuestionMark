@@ -85,7 +85,7 @@ body {
 }
 
 .perfil-fondo {
-    background-image: url('/QuestionMark/view/img_page/fondo_perfil2.png') !important;
+    background-image: url('/view/img_page/fondo_perfil2.png') !important;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

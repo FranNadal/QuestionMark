@@ -14,7 +14,7 @@ class JugarController
             session_start();
         }
         if (!isset($_SESSION['id_usuario'])) {
-            header("Location: /QuestionMark/");
+            header("Location: /");
             exit();
         }
     }

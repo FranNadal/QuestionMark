@@ -24,7 +24,7 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-image: url('/QuestionMark/view/img_page/page_backgraund.webp');
+    background-image: url('/view/img_page/page_backgraund.webp');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

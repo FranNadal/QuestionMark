@@ -50,7 +50,7 @@ public function __construct($database){
             return "Error al enviar el correo de confirmación.";
         }*/
 // Enviar email con API de Brevo
-        $link = "http://localhost/QuestionMark/index.php?controller=register&method=validate&token=" . $token;
+        $link = "http://localhost/index.php?controller=register&method=validate&token=" . $token;
 
         $data = [
             "sender" => [

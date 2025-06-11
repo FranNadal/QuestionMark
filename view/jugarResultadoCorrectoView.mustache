@@ -8,9 +8,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/QuestionMark/view/styles/headerStyles.css">
     <link rel="stylesheet" href="/QuestionMark/view/styles/jugarViewStyles.css">
-    <link rel="stylesheet" href="/QuestionMark/view/styles/jugarResultadoCorrectoViewStyles.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/QuestionMark/view/img_page/icono_pagina.ico" />
+    <style>
+        body.modal-abierto {
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
@@ -41,17 +45,10 @@
 
         <div class="w3-margin-top">
             {{#es_correcta}}
-            <p class="w3-text-green"><strong>¡Respuesta correcta!</strong></p>
-            <p>Opcion: <strong>{{texto_respuesta_correcta}}</strong></p>
-            <a href="/QuestionMark/jugar/view" class="w3-button w3-theme w3-round-large">Siguiente pregunta</a>
-             {{/es_correcta}}
-
-
-            {{^es_correcta}}
-                <p class="w3-text-red"><strong>¡Respuesta incorrecta!</strong></p>
-
-                <button class="w3-button w3-theme w3-round-large" onclick="window.location.href='/QuestionMark/jugar/view'">Volver a jugar</button>
+                <p class="w3-text-green"><strong>¡Respuesta correcta!</strong></p>
+                <a href="/QuestionMark/jugar/ruleta" class="w3-button w3-theme w3-round-large">Siguiente pregunta</a>
             {{/es_correcta}}
+            
         </div>
     </div>
 </div>

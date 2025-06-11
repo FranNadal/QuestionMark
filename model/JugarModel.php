@@ -46,6 +46,21 @@ private $database;
         }
         return $this->database->fetchOne($sql);
     }
+    public function getPreguntaPorCategoriaNoJugadas($categoria, $id_usuario)
+    {
+        $sql = "SELECT p.*, r.opcion_a, r.opcion_b, r.opcion_c, r.opcion_d, r.respuesta_correcta
+            FROM preguntas_juego p
+            JOIN respuestas_juego r ON p.id_pregunta = r.id_pregunta
+            WHERE p.categoria = ?
+              AND p.id_pregunta NOT IN (
+                  SELECT id_pregunta FROM preguntas_jugadas WHERE id_usuario = ?
+              )
+            ORDER BY RAND()
+            LIMIT 1";
+
+        return $this->database->fetchOne($sql, [$categoria, $id_usuario]);
+    }
+
 
 
     public function getColorCategoria($categoria)

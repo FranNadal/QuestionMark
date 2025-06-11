@@ -18,6 +18,26 @@ class JugarController
             exit();
         }
     }
+    public function ruleta()
+    {
+        if (isset($_GET['categoria'])) {  // si llega categoria por GET
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $_SESSION['categoria_seleccionada'] = $_GET['categoria'];
+            header('Location: /QuestionMark/jugar/view');
+            exit;
+        }
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $this->view->render('ruleta');  // Mostrar animación la primera vez
+    }
+
+
 
     public function view(){
         $this->verificarSesionActiva();
@@ -29,7 +49,12 @@ class JugarController
         if (!isset($_SESSION['puntaje'])) {
             $_SESSION['puntaje'] = 0;
         }
-
+        /* 2A. Necesitamos categoría en sesión */
+        $categoria = $_SESSION['categoria_seleccionada'] ?? null;
+        if (!$categoria) {
+            header('Location: /QuestionMark/jugar/ruleta');
+            exit;
+        }
         $id_usuario = $_SESSION['id_usuario'];
 
         $totalPreguntas = $this->model->getCantidadPreguntas();
@@ -39,23 +64,30 @@ class JugarController
             $this->model->borrarPreguntasJugadas($id_usuario);
         }
 
-        $pregunta = $this->model->getPreguntaAleatoriaNoJugadas($id_usuario);
+        $pregunta = $this->model->getPreguntaPorCategoriaNoJugadas($categoria, $id_usuario);
 
         if (!$pregunta) {
-            $this->view->render("error", ["mensaje" => "No hay preguntas disponibles."]);
-            return;
+            // si se agotaron, volvemos a girar
+
+                header('Location: /QuestionMark/jugar/ruleta');
+                exit;
+
+
         }
+     //   $pregunta = $this->model->getPreguntaAleatoriaNoJugadas($id_usuario);
+
+
 
         $this->model->registrarPreguntaJugada($id_usuario, $pregunta['id_pregunta']);
 
-        $color_categoria = $this->model->getColorCategoria($pregunta['categoria']);
+
 
         $_SESSION['tiempo_inicio_pregunta'] = time();
 
         $this->view->render("jugar", [
             "pregunta" => $pregunta,
             "puntaje_actual" => $_SESSION['puntaje'],
-            "color_categoria" => $color_categoria
+            "color_categoria" =>  $this->model->getColorCategoria($categoria)
         ]);
     }
 
@@ -78,7 +110,7 @@ class JugarController
         $respuesta   = $_POST['respuesta']   ?? null;
 
         if (!$id_pregunta || !$respuesta) {
-            header("Location:/jugar");
+            header("Location:/QuestionMark/jugar/ruleta");
             exit;
         }
 
@@ -117,10 +149,12 @@ class JugarController
         if ($acierto) {
             $_SESSION['puntaje']++;
             $_SESSION['tiempo_inicio_pregunta'] = time();  // reinicia tiempo para la próxima
+
+
             $this->view->render('jugarResultadoCorrecto', [
                 'pregunta'          => $pregunta,
                 'puntaje_actual'    => $_SESSION['puntaje'],
-                'color_categoria'   => $this->model->getColorCategoria($pregunta['categoria']),
+                'color_categoria'   => $this->model->getColorCategoria($_SESSION['categoria_seleccionada']),
                 'es_correcta'       => $acierto,
                 'respuesta_correcta'        => $respuesta_correcta,
                 'texto_respuesta_correcta'  => $texto_respuesta_correcta,

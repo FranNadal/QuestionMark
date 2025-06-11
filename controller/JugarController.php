@@ -64,13 +64,14 @@ class JugarController
             $this->model->borrarPreguntasJugadas($id_usuario);
         }
 
-        $pregunta = $this->model->getPreguntaPorCategoriaNoJugadas($categoria,$id_usuario);
+        $pregunta = $this->model->getPreguntaPorCategoriaNoJugadas($categoria, $id_usuario);
+
         if (!$pregunta) {
             // si se agotaron, volvemos a girar
-            if(!empty($_SESSION['ultima_respuesta_correcta'])){
+
                 header('Location: /QuestionMark/jugar/ruleta');
                 exit;
-            }
+
 
         }
      //   $pregunta = $this->model->getPreguntaAleatoriaNoJugadas($id_usuario);

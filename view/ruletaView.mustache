@@ -15,11 +15,11 @@
     <link rel="icon" type="image/x-icon" href="/QuestionMark/view/img_page/icono_pagina.ico">
     <style>
         body { font-family: 'Nunito', sans-serif; }
-        #ruleta        { width: 280px; transition: transform 3s ease-out; cursor:pointer; }
-        #categoriaBox  { font-weight:bold; font-size:1.7rem; margin-top:12px; }
-        .leyenda       { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:6px; max-width:450px; margin:24px auto;}
-        .leyenda span  { display:flex; align-items:center; gap:6px; }
-        .cuadro-color  { flex:0 0 16px; height:16px; border-radius:4px; }
+        canvas { cursor: pointer; }
+        #categoriaBox { font-weight: bold; font-size: 1.7rem; margin-top: 12px; }
+        .leyenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; max-width: 450px; margin: 24px auto; }
+        .leyenda span { display: flex; align-items: center; gap: 6px; }
+        .cuadro-color { flex: 0 0 16px; height: 16px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -29,13 +29,12 @@
 <div class="w3-container w3-center w3-padding-large">
     <h2>¡Girá la ruleta para elegir categoría!</h2>
 
-    <!-- Imagen de la ruleta -->
-    <img id="ruleta" src="/QuestionMark/view/img_page/ruleta.png" alt="Ruleta de categorías">
+    <canvas id="canvas" width="500" height="500"></canvas>
 
     <!-- Categoría elegida -->
     <p id="categoriaBox"></p>
 
-    <!-- Leyenda de colores (opcional pero útil) -->
+    <!-- Leyenda de colores -->
     <div class="leyenda">
         <span><span class="cuadro-color" style="background:#FF5733"></span>Historia</span>
         <span><span class="cuadro-color" style="background:#33B5FF"></span>Ciencia</span>
@@ -49,41 +48,141 @@
 </div>
 
 <script>
-    // Apenas carga la página, la ruleta gira automáticamente.
-    window.addEventListener('load', girarRuleta);
-    // Si el usuario hace clic sobre ella puede volver a girar.
-    document.getElementById('ruleta').addEventListener('click', girarRuleta);
+    const options = [
+        { id: 1, nombre: "Historia" },
+        { id: 2, nombre: "Ciencia" },
+        { id: 3, nombre: "Deportes" },
+        { id: 4, nombre: "Arte" },
+        { id: 5, nombre: "Geografía" },
+        { id: 6, nombre: "Matemática" },
+        { id: 7, nombre: "Literatura" },
+        { id: 8, nombre: "Cultura" }
+    ];
 
-    function girarRuleta() {
-        const imgRuleta = document.getElementById('ruleta');
-        const grados    = 720 + Math.floor(Math.random() * 360); // 2 vueltas + aleatorio
-        imgRuleta.style.transform = `rotate(${grados}deg)`;
+    let startAngle = 0;
+    let arc = Math.PI / (options.length / 2);
+    let spinTimeout = null;
+    let spinAngleStart = 10;
+    let spinTime = 0;
+    let spinTimeTotal = 0;
+    let ctx;
 
-        /* Al terminar la animación solicitamos la categoría a la API  */
-        setTimeout(() => {
-            fetch('/QuestionMark/index.php?controller=api&method=ruleta')
+    const canvas = document.getElementById("canvas");
+    canvas.addEventListener("click", spin);
 
-                    .then(r => r.ok ? r.json() : Promise.reject())
-                    .then(data => {
-                        if (!data.categoria) {
-                            alert('No se pudo obtener la categoría');
-                            return;
-                        }
+    function drawRouletteWheel() {
+        const outsideRadius = 200;
+        const textRadius = 160;
+        const insideRadius = 75;
 
-                        // Mostrarla un instante al usuario
-                        document.getElementById('categoriaBox').textContent =
-                                'Categoría: ' + data.categoria;
+        ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, 500, 500);
 
-                        // Esperar 1 s y redirigir al controlador
-                        setTimeout(() => {
-                            location.href = '/QuestionMark/jugar/ruleta?categoria=' +
-                                    encodeURIComponent(data.categoria);
-                        }, 1000);
-                    })
-                    .catch(() => alert('Error al comunicarse con la API de ruleta'));
-        }, 3000); // coincide con los 3 s de la transición CSS
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.font = 'bold 16px Nunito';
+
+        for (let i = 0; i < options.length; i++) {
+            const angle = startAngle + i * arc;
+            ctx.fillStyle = getColor(i, options.length);
+
+            ctx.beginPath();
+            ctx.arc(250, 250, outsideRadius, angle, angle + arc, false);
+            ctx.arc(250, 250, insideRadius, angle + arc, angle, true);
+            ctx.stroke();
+            ctx.fill();
+
+            ctx.save();
+            ctx.fillStyle = "black";
+            ctx.translate(250 + Math.cos(angle + arc / 2) * textRadius, 250 + Math.sin(angle + arc / 2) * textRadius);
+            ctx.rotate(angle + arc / 2 + Math.PI / 2);
+            const text = options[i].nombre;
+            ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+            ctx.restore();
+        }
+
+        // flecha
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(250 - 4, 250 - (outsideRadius + 5));
+        ctx.lineTo(250 + 4, 250 - (outsideRadius + 5));
+        ctx.lineTo(250 + 4, 250 - (outsideRadius - 5));
+        ctx.lineTo(250 + 9, 250 - (outsideRadius - 5));
+        ctx.lineTo(250 + 0, 250 - (outsideRadius - 13));
+        ctx.lineTo(250 - 9, 250 - (outsideRadius - 5));
+        ctx.lineTo(250 - 4, 250 - (outsideRadius - 5));
+        ctx.lineTo(250 - 4, 250 - (outsideRadius + 5));
+        ctx.fill();
     }
+
+    function spin() {
+        spinAngleStart = Math.random() * 20 + 15;
+        spinTime = 0;
+        spinTimeTotal = Math.random() * 3 + 4 * 1000;
+        rotateWheel();
+    }
+
+    function rotateWheel() {
+        spinTime += 20;
+        if (spinTime >= spinTimeTotal) {
+            stopRotateWheel();
+            return;
+        }
+        const spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+        startAngle += (spinAngle * Math.PI / 180);
+        drawRouletteWheel();
+        spinTimeout = setTimeout(rotateWheel, 20);
+    }
+
+    function stopRotateWheel() {
+        clearTimeout(spinTimeout);
+        const degrees = startAngle * 180 / Math.PI + 90;
+        const arcd = arc * 180 / Math.PI;
+        const index = Math.floor((360 - degrees % 360) / arcd);
+        const categoriaSeleccionada = options[index];
+
+        ctx.save();
+        ctx.font = 'bold 30px Nunito';
+        ctx.clearRect(150, 240, 200, 50);
+        ctx.fillText(categoriaSeleccionada.nombre, 250 - ctx.measureText(categoriaSeleccionada.nombre).width / 2, 250 + 10);
+        ctx.restore();
+
+        document.getElementById("categoriaBox").textContent = "Categoría: " + categoriaSeleccionada.nombre;
+
+        setTimeout(() => {
+            location.href = '/QuestionMark/jugar/ruleta?categoria=' + encodeURIComponent(categoriaSeleccionada.nombre);
+        }, 1000);
+    }
+
+    function easeOut(t, b, c, d) {
+        const ts = (t /= d) * t;
+        const tc = ts * t;
+        return b + c * (tc + -3 * ts + 3 * t);
+    }
+
+    function byte2Hex(n) {
+        const nybHexString = "0123456789ABCDEF";
+        return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
+    }
+
+    function RGB2Color(r, g, b) {
+        return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+    }
+
+    function getColor(item, maxitem) {
+        const phase = 8;
+        const center = 129;
+        const width = 127;
+        const frequency = Math.PI * 2 / maxitem;
+
+        const red = Math.sin(frequency * item + 2 + phase) * width + center;
+        const green = Math.sin(frequency * item + 0 + phase) * width + center;
+        const blue = Math.sin(frequency * item + 4 + phase) * width + center;
+
+        return RGB2Color(red, green, blue);
+    }
+
+    drawRouletteWheel();
 </script>
 </body>
 </html>
-

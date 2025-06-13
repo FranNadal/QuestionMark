@@ -14,7 +14,7 @@ class HomeController
         if (isset($_SESSION['user'])) {
             $this->view->render("home");
         }else{
-            $this->redirectTo("/QuestionMark/");
+            $this->redirectTo("/");
 
         }
     }

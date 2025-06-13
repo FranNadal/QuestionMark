@@ -12,7 +12,7 @@ class JugarController
     private function verificarSesionActiva() {
 
         if (!isset($_SESSION['id_usuario'])) {
-            header("Location: /QuestionMark/");
+            header("Location: /");
             exit();
         }
     }
@@ -22,7 +22,7 @@ class JugarController
         if (isset($_GET['categoria'])) {
 
             $_SESSION['categoria_seleccionada'] = $_GET['categoria'];
-            header('Location: /QuestionMark/jugar/view');
+            header('Location: /jugar/view');
             exit;
         }
 
@@ -44,7 +44,7 @@ class JugarController
 
         $categoria = $_SESSION['categoria_seleccionada'] ?? null;
         if (!$categoria) {
-            header('Location: /QuestionMark/jugar/ruleta');
+            header('Location: /jugar/ruleta');
             exit;
         }
 
@@ -57,7 +57,7 @@ class JugarController
             $dificultad = $this->model->determinarDificultadParaUsuario($id_usuario);
 
             if (!$this->model->hayPreguntasPorCategoriaYDificultad($categoria, $dificultad, $id_usuario)) {
-                header('Location: /QuestionMark/jugar/ruleta');
+                header('Location: /jugar/ruleta');
                 exit;
             }
         }
@@ -65,7 +65,7 @@ class JugarController
         $pregunta = $this->model->getPreguntaPorCategoriaYDificultad($categoria, $dificultad, $id_usuario);
 
         if (!$pregunta) {
-            header('Location: /QuestionMark/jugar/ruleta');
+            header('Location: /jugar/ruleta');
             exit;
         }
 
@@ -101,7 +101,7 @@ class JugarController
         $respuesta   = $_POST['respuesta']   ?? null;
 
         if (!$id_pregunta || !$respuesta) {
-            header('Location: /QuestionMark/jugar/ruleta');
+            header('Location: /jugar/ruleta');
             exit;
         }
 

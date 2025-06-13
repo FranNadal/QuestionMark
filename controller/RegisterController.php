@@ -60,7 +60,7 @@ $foto_perfil = $_FILES['foto_perfil'] ?? null;
         if (is_string($resultado) ){
             $this->view->render('register', ['error_message' => $resultado]);
         }else{
-            $this->redirectTo("/QuestionMark/login/view");
+            $this->redirectTo("/login/view");
 
         }
 }

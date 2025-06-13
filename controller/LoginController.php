@@ -43,14 +43,14 @@ class LoginController
             $_SESSION['user'] = $resultado["nombre_usuario"];
             $_SESSION['id_usuario'] = $resultado["id_usuario"];
 
-            $this->redirectTo('/QuestionMark/home/view');
+            $this->redirectTo('/home/view');
         }
     }
 
     public function logout()
     {
         session_destroy();
-        $this->redirectTo("/QuestionMark/");
+        $this->redirectTo("/");
     }
 
 

@@ -6,10 +6,10 @@ Options -Indexes
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /QuestionMark/
+    RewriteBase /
 
     # Permitir acceso directo a la carpeta view
-    RewriteCond %{REQUEST_URI} ^/QuestionMark/view/ [NC]
+    RewriteCond %{REQUEST_URI} ^/view/ [NC]
     RewriteRule .* - [L]
 
     RewriteRule ^(public)($|/) - [L,NC]

@@ -14,18 +14,19 @@ class PerfilController
 
     public function view()
     {
-        session_start();
+
         if (isset($_SESSION['user'])) {
             $data["datos"] = $this->model->obtenerPerfil($_SESSION["user"]);
             $this->view->render("perfil", $data);
         } else {
             $this->redirectTo("/QuestionMark/");
+
         }
     }
 
     public function show()
     {
-        session_start();
+
         if (isset($_SESSION["user"])) {
             $this->view->render("home");
         } else {
@@ -35,7 +36,7 @@ class PerfilController
 
     public function editar()
     {
-        session_start();
+
         if (isset($_SESSION['user'])) {
             $data["datos"] = $this->model->obtenerPerfil($_SESSION["user"]);
             $data["edicion_perfil"] = true;
@@ -47,7 +48,6 @@ class PerfilController
 
     public function guardar()
     {
-        session_start();
         if (!isset($_SESSION['user'])) {
             $this->redirectTo("/QuestionMark/");
         }
@@ -74,6 +74,7 @@ class PerfilController
                 $nuevoNombreArchivo = $usuario . '_' . time() . '.' . $extencionDelArchivo;
 
                 $direccionDeSubida = 'C:/xampp/htdocs/QuestionMark/view/img_page/';
+
                 $rutaDestino = $direccionDeSubida . $nuevoNombreArchivo;
 
                 if (move_uploaded_file($rutaTemporal, $rutaDestino)) {
@@ -85,6 +86,7 @@ class PerfilController
 
         $this->model->actualizarPerfil($usuario, $datos);
         $this->redirectTo("/QuestionMark/perfil/view");
+
     }
 
 

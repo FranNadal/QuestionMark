@@ -170,4 +170,68 @@ $this->database->execute($sql, [$id_usuario, $fecha_inicio, $fecha_fin, $puntaje
         return 'Sin datos';
     }
 
+    public function determinarDificultadParaUsuario($id_usuario) {
+        $sql = $this->database->fetchOne("SELECT preguntas_respondidas, respuestas_correctas FROM usuario_estadisticas WHERE id_usuario = ?", [$id_usuario]);
+
+        if (!$sql || $sql['preguntas_respondidas'] <= 5) {
+            return 'Fácil';
+        }
+
+        $ratio = $sql['respuestas_correctas'] / $sql['preguntas_respondidas'];
+
+        if ($ratio < 0.3) {
+            return 'Fácil';
+        } elseif ($ratio <= 0.7) {
+            return 'Media';
+        } else {
+            return 'Difícil';
+        }
+    }
+
+
+
+
+    public function getPreguntaPorCategoriaYDificultad($categoria, $dificultad, $id_usuario) {
+        $sql = "SELECT p.*, r.opcion_a, r.opcion_b, r.opcion_c, r.opcion_d, r.respuesta_correcta
+            FROM preguntas_juego p
+            JOIN respuestas_juego r ON p.id_pregunta = r.id_pregunta
+            WHERE p.categoria = ?
+              AND p.dificultad = ?
+              AND p.id_pregunta NOT IN (
+                  SELECT id_pregunta FROM preguntas_jugadas WHERE id_usuario = ?
+              )
+            ORDER BY RAND()
+            LIMIT 1";
+        return $this->database->fetchOne($sql, [$categoria, $dificultad, $id_usuario]);
+    }
+
+    public function hayPreguntasDisponibles($categoria, $dificultad, $id_usuario) {
+        $sql = "SELECT COUNT(*) as total
+            FROM preguntas_juego
+            WHERE categoria = ?
+              AND dificultad = ?
+              AND id_pregunta NOT IN (
+                  SELECT id_pregunta FROM preguntas_jugadas WHERE id_usuario = ?
+              )";
+        $resultado = $this->database->fetchOne($sql, [$categoria, $dificultad, $id_usuario]);
+        return $resultado && $resultado['total'] > 0;
+    }
+
+
+
+
+    public function hayPreguntasPorCategoriaYDificultad($categoria, $dificultad, $id_usuario) {
+        $sql = "SELECT COUNT(*) as cantidad
+            FROM preguntas_juego
+            WHERE categoria = ?
+              AND dificultad = ?
+              AND id_pregunta NOT IN (
+                  SELECT id_pregunta FROM preguntas_jugadas WHERE id_usuario = ?
+              )";
+        $resultado = $this->database->fetchOne($sql, [$categoria, $dificultad, $id_usuario]);
+        return $resultado && $resultado['cantidad'] > 0;
+    }
+
 }
+
+

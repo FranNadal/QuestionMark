@@ -15,7 +15,6 @@ public function register(){
 
     public function show()
     {
-        session_start();
         if (isset($_SESSION["user"])){
             $this->view->render("home");
         }else{
@@ -63,7 +62,7 @@ $foto_perfil = $_FILES['foto_perfil'] ?? null;
         }else{
             $this->redirectTo("/QuestionMark/login/view");
 
-    }
+        }
 }
 
 

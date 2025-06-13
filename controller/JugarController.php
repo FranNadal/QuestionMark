@@ -10,28 +10,20 @@ class JugarController
         $this->model = $model;
     }
     private function verificarSesionActiva() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+
         if (!isset($_SESSION['id_usuario'])) {
             header("Location: /QuestionMark/");
             exit();
         }
     }
+
     public function ruleta()
     {
-        if (isset($_GET['categoria'])) {  // si llega categoria por GET
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
+        if (isset($_GET['categoria'])) {
 
             $_SESSION['categoria_seleccionada'] = $_GET['categoria'];
             header('Location: /QuestionMark/jugar/view');
             exit;
-        }
-
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
         }
 
         $this->view->render('ruleta');  // Mostrar animación la primera vez
@@ -39,7 +31,7 @@ class JugarController
 
 
 
-    public function view(){
+    public function view() {
         $this->verificarSesionActiva();
 
         if (!isset($_SESSION['fecha_inicio_partida'])) {
@@ -49,47 +41,46 @@ class JugarController
         if (!isset($_SESSION['puntaje'])) {
             $_SESSION['puntaje'] = 0;
         }
-        /* 2A. Necesitamos categoría en sesión */
+
         $categoria = $_SESSION['categoria_seleccionada'] ?? null;
         if (!$categoria) {
             header('Location: /QuestionMark/jugar/ruleta');
             exit;
         }
+
         $id_usuario = $_SESSION['id_usuario'];
+        $dificultad = $this->model->determinarDificultadParaUsuario($id_usuario);
 
-        $totalPreguntas = $this->model->getCantidadPreguntas();
-        $jugadas = $this->model->contarPreguntasJugadas($id_usuario);
-
-        if ($jugadas >= $totalPreguntas) {
+        if (!$this->model->hayPreguntasPorCategoriaYDificultad($categoria, $dificultad, $id_usuario)) {
             $this->model->borrarPreguntasJugadas($id_usuario);
-        }
 
-        $pregunta = $this->model->getPreguntaPorCategoriaNoJugadas($categoria, $id_usuario);
+            $dificultad = $this->model->determinarDificultadParaUsuario($id_usuario);
 
-        if (!$pregunta) {
-            // si se agotaron, volvemos a girar
-
+            if (!$this->model->hayPreguntasPorCategoriaYDificultad($categoria, $dificultad, $id_usuario)) {
                 header('Location: /QuestionMark/jugar/ruleta');
                 exit;
-
-
+            }
         }
-     //   $pregunta = $this->model->getPreguntaAleatoriaNoJugadas($id_usuario);
 
+        $pregunta = $this->model->getPreguntaPorCategoriaYDificultad($categoria, $dificultad, $id_usuario);
 
+        if (!$pregunta) {
+            header('Location: /QuestionMark/jugar/ruleta');
+            exit;
+        }
 
         $this->model->registrarPreguntaJugada($id_usuario, $pregunta['id_pregunta']);
-
-
 
         $_SESSION['tiempo_inicio_pregunta'] = time();
 
         $this->view->render("jugar", [
             "pregunta" => $pregunta,
             "puntaje_actual" => $_SESSION['puntaje'],
-            "color_categoria" =>  $this->model->getColorCategoria($categoria)
+            "color_categoria" => $this->model->getColorCategoria($categoria)
         ]);
     }
+
+
 
 
     public function responder()
@@ -110,7 +101,7 @@ class JugarController
         $respuesta   = $_POST['respuesta']   ?? null;
 
         if (!$id_pregunta || !$respuesta) {
-            header("Location:/QuestionMark/jugar/ruleta");
+            header('Location: /QuestionMark/jugar/ruleta');
             exit;
         }
 
@@ -199,7 +190,6 @@ class JugarController
     private function terminarPartidaPorTiempo() {
         $this->terminarPartidaConMensaje('¡Se acabó el tiempo!');
     }
-
 
 
 

@@ -15,7 +15,6 @@ class LoginController
 
     public function show()
     {
-        session_start();
         if (isset($_SESSION["user"])){
             $this->view->render("home");
         }else{
@@ -40,17 +39,16 @@ class LoginController
             $this->view->render('login', ['error_message' => $resultado]);
 
         }else{
-            session_start();
+
             $_SESSION['user'] = $resultado["nombre_usuario"];
             $_SESSION['id_usuario'] = $resultado["id_usuario"];
 
-            $this->redirectTo("/QuestionMark/home/view");
+            $this->redirectTo('/QuestionMark/home/view');
         }
     }
 
     public function logout()
     {
-        session_start();
         session_destroy();
         $this->redirectTo("/QuestionMark/");
     }

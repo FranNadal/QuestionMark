@@ -5,20 +5,25 @@
     <title>Iniciar Sesión</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/view/styles/loginViewStyles.css">
+    <!-- Fuente Roboto de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/view/img_page/icono_pagina.ico" />
+
+
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen">
 
 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
     <h2 class="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
 
     {{#error_message}}
-        <div class="w3-text-red" style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
+        <div class="text-red-600 text-center pb-2">
             {{error_message}}
         </div>
     {{/error_message}}
 
-    <form action="/QuestionMark/login/doLogin" method="POST" class="space-y-4">
-
+    <form action="/login/doLogin" method="POST" class="space-y-4">
 
         <div>
             <label for="email" class="block font-semibold">Correo electrónico</label>
@@ -33,7 +38,7 @@
         </div>
 
         <button type="submit"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 w-full rounded">
+                class="bg-[#9c27b0] hover:bg-purple-800 text-white  py-2 px-4 w-full rounded">
             Iniciar Sesión
         </button>
 

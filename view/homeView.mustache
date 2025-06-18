@@ -1,46 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>QuizMaster - Lobby</title>
+    <title>Question Mark</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/view/styles/headerStyles.css">
+    <link rel="stylesheet" href="/view/styles/homeViewStyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/view/img_page/icono_pagina.ico" />
     <style>
-        body {
-            background-color: #f9f9f9;
-        }
-        .card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .button-group button {
-            margin-right: 10px;
-        }
-        .victoria {
-            color: green;
-            font-weight: bold;
-        }
-        .derrota {
-            color: red;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
 
-<!-- Navbar superior -->
-<div class="w3-bar w3-theme w3-padding">
-    <span class="w3-bar-item w3-xlarge w3-text-white"><b>QuizMaster</b></span>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small">Inicio</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small">Jugar</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small">Ranking</a>
-    <a href="/QuestionMark/perfil/view" class="w3-bar-item w3-button w3-hide-small">Perfil</a>
-    <a href="/QuestionMark/login/logout" class="w3-bar-item w3-button w3-hide-small">Desconectarse</a>
-    <span class="w3-bar-item w3-right"><i class="fa fa-trophy"></i> 1250</span>
-</div>
+{{> header}}
 
 <div class="w3-content" style="max-width:1200px; margin-top:30px;">
 
@@ -52,7 +27,10 @@
                 <h4>Bienvenido, <b>Carlos Rodríguez</b></h4>
                 <p>¿Listo para poner a prueba tus conocimientos?</p>
                 <div class="button-group">
-                    <button class="w3-button w3-theme w3-round-large">+ Crear nueva partida</button>
+                    <a href="/jugar/ruleta">
+                        <button class="w3-button w3-theme w3-round-large">+ Crear nueva partida</button>
+                    </a>
+
                     <button class="w3-button w3-border w3-round-large">👁 Ver ranking</button>
                     <button class="w3-button w3-border w3-round-large">📄 Crear pregunta</button>
                 </div>

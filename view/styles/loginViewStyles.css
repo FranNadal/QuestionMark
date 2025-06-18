@@ -1,0 +1,9 @@
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #F8F6FB;
+    background-image: url('/view/img_page/page_backgraund.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}

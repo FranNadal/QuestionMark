@@ -11,6 +11,10 @@ require_once("controller/TourController.php");
 require_once("controller/RegisterController.php");
 require_once("controller/LoginController.php");
 require_once("controller/PerfilController.php");
+require_once("controller/JugarController.php");
+require_once("controller/ApiController.php");
+
+
 
 require_once("model/GroupModel.php");
 require_once("model/SongModel.php");
@@ -18,6 +22,7 @@ require_once("model/TourModel.php");
 require_once("model/RegisterModel.php");
 require_once("model/LoginModel.php");
 require_once("model/PerfilModel.php");
+require_once("model/JugarModel.php");
 include_once('vendor/mustache/src/Mustache/Autoloader.php');
 
 class Configuration
@@ -46,7 +51,10 @@ class Configuration
             $this->getViewer()
         );
     }
-
+    public function getApiController()
+    {
+        return new ApiController();
+    }
     public function getTourController()
     {
         return new TourController(
@@ -65,6 +73,10 @@ class Configuration
         return new PerfilController(new PerfilModel($this->getDatabase()), $this->getViewer());
     }
 
+    public function getJugarController()
+    {
+        return new JugarController(new JugarModel($this->getDatabase()), $this->getViewer());
+    }
 
     public function getGroupController()
     {

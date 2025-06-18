@@ -1,0 +1,47 @@
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.button-group button {
+    margin-right: 10px;
+}
+.victoria {
+    color: green;
+    font-weight: bold;
+}
+.derrota {
+    color: red;
+    font-weight: bold;
+}
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #F8F6FB;
+}
+h1, h2, h3, h4, h5, h6, p, b, strong, span, button {
+    font-family: 'Nunito', sans-serif;
+}
+
+.nunito-400 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.nunito-600 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.nunito-800 {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}
+

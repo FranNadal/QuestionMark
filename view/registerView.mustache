@@ -5,20 +5,19 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        #mapid { height: 300px; margin-bottom: 15px; }
-    </style>
-</head>
-<body class="w3-light-grey">
+    <link rel="stylesheet" href="/view/styles/registerViewStyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/view/img_page/icono_pagina.ico" />
 
-<div class="w3-container w3-display-middle w3-card-4 w3-white w3-padding-large" style="max-width:600px;">
+
+</head>
+<body>
+
+<div class="registro-container">
+    <div class="form-card">
     <h2 class="w3-center">Registro</h2>
 
-
-
-
-
-    <form action="/QuestionMark/register/doRegister" method="POST" enctype="multipart/form-data" class="w3-container">
+    <form action="/doRegister" method="POST" enctype="multipart/form-data" class="w3-container">
         {{#error_message}}
             <div class="w3-text-red"
                  style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
@@ -69,9 +68,10 @@
 
 
         <br>
-        <button class="w3-button w3-blue w3-block" type="submit">Registrarse</button>
+        <button class="w3-button w3-purple w3-block" type="submit">Registrarse</button>
 
     </form>
+</div>
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

@@ -11,12 +11,7 @@ class HomeController
 
     public function view()
     {
-        if (isset($_SESSION['user'])) {
             $this->view->render("home");
-        }else{
-            $this->redirectTo("/QuestionMark/");
-
-        }
     }
 
     public function show()

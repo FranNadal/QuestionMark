@@ -9,20 +9,13 @@ class JugarController
         $this->view = $view;
         $this->model = $model;
     }
-    private function verificarSesionActiva() {
-
-        if (!isset($_SESSION['id_usuario'])) {
-            header("Location: /QuestionMark/");
-            exit();
-        }
-    }
 
     public function ruleta()
     {
         if (isset($_GET['categoria'])) {
 
             $_SESSION['categoria_seleccionada'] = $_GET['categoria'];
-            header('Location: /QuestionMark/jugar/view');
+            header('Location: /jugar/view');
             exit;
         }
 
@@ -32,7 +25,6 @@ class JugarController
 
 
     public function view() {
-        $this->verificarSesionActiva();
 
         if (!isset($_SESSION['fecha_inicio_partida'])) {
             $_SESSION['fecha_inicio_partida'] = date('Y-m-d H:i:s');
@@ -44,7 +36,7 @@ class JugarController
 
         $categoria = $_SESSION['categoria_seleccionada'] ?? null;
         if (!$categoria) {
-            header('Location: /QuestionMark/jugar/ruleta');
+            header('Location: /jugar/ruleta');
             exit;
         }
 
@@ -57,7 +49,7 @@ class JugarController
             $dificultad = $this->model->determinarDificultadParaUsuario($id_usuario);
 
             if (!$this->model->hayPreguntasPorCategoriaYDificultad($categoria, $dificultad, $id_usuario)) {
-                header('Location: /QuestionMark/jugar/ruleta');
+                header('Location: /jugar/ruleta');
                 exit;
             }
         }
@@ -65,7 +57,7 @@ class JugarController
         $pregunta = $this->model->getPreguntaPorCategoriaYDificultad($categoria, $dificultad, $id_usuario);
 
         if (!$pregunta) {
-            header('Location: /QuestionMark/jugar/ruleta');
+            header('Location: /jugar/ruleta');
             exit;
         }
 
@@ -85,8 +77,6 @@ class JugarController
 
     public function responder()
     {
-        $this->verificarSesionActiva();
-
 
         if (isset($_SESSION['tiempo_inicio_pregunta'])) {
             $tiempo = time() - $_SESSION['tiempo_inicio_pregunta'];
@@ -101,7 +91,7 @@ class JugarController
         $respuesta   = $_POST['respuesta']   ?? null;
 
         if (!$id_pregunta || !$respuesta) {
-            header('Location: /QuestionMark/jugar/ruleta');
+            header('Location: /jugar/ruleta');
             exit;
         }
 
@@ -160,7 +150,6 @@ class JugarController
 
 
     private function terminarPartidaConMensaje($mensaje) {
-        $this->verificarSesionActiva();
 
         $id_usuario = $_SESSION['id_usuario'];
         $fecha_inicio = $_SESSION['fecha_inicio_partida'];

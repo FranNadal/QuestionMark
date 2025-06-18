@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="/QuestionMark/view/styles/headerStyles.css">
-    <link rel="stylesheet" href="/QuestionMark/view/styles/jugarViewStyles.css">
+    <link rel="stylesheet" href="/view/styles/headerStyles.css">
+    <link rel="stylesheet" href="/view/styles/jugarViewStyles.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="/QuestionMark/view/img_page/icono_pagina.ico" />
+    <link rel="icon" type="image/x-icon" href="/view/img_page/icono_pagina.ico" />
 
 
 </head>
@@ -27,16 +27,16 @@
 
         <div class="info">
             <p>
-                <img src="/QuestionMark/view/img_page/marcas.png" alt="Puntaje" class="info-icono" />
+                <img src="/view/img_page/marcas.png" alt="Puntaje" class="info-icono" />
                 <strong></strong> <span id="puntaje-actual">{{puntaje_actual}}</span>
             </p>
             <p>
-                <img src="/QuestionMark/view/img_page/reloj.png" alt="Tiempo" class="info-icono" />
+                <img src="/view/img_page/reloj.png" alt="Tiempo" class="info-icono" />
                 <strong></strong> <span id="timer">60"</span>
             </p>
         </div>
 
-        <img src="/QuestionMark/view/img_page/{{pregunta.categoria}}.png" alt="{{pregunta.categoria}}" class="categoria-img" />
+        <img src="/view/img_page/{{pregunta.categoria}}.png" alt="{{pregunta.categoria}}" class="categoria-img" />
     </div>
 
     <div class="barra-tiempo" id="barra-tiempo" style="background-color: {{color_categoria}};"></div>
@@ -48,7 +48,7 @@
         <div class="contenedor-h3"><h3>{{pregunta.texto}}</h3></div>
 
 
-        <form action="/QuestionMark/jugar/responder" method="POST" class="form-respuestas">
+        <form action="/jugar/responder" method="POST" class="form-respuestas">
             <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
 
             <button type="submit" name="respuesta" value="A" class="boton-respuesta">
@@ -84,7 +84,7 @@
         <h2 class="mensaje-fin-juego">¡Se terminó el juego!</h2>
         <p id="mensaje-fin">{{mensaje_fin}}</p>
         <p>Tu puntaje final es: <span id="puntaje-final">{{puntaje_final}}</span></p>
-        <button class="w3-button w3-theme w3-round-large" onclick="window.location.href='/QuestionMark/jugar/view'">Volver a jugar</button>
+        <button class="w3-button w3-theme w3-round-large" onclick="window.location.href='/jugar/view'">Volver a jugar</button>
 
     </div>
 </div>

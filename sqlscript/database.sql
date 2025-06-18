@@ -131,6 +131,16 @@ INSERT INTO `preguntas_juego` (`id_pregunta`, `texto`, `categoria`, `dificultad`
 (39, '¿Qué equipo ha ganado más Copas Libertadores?', 'Deportes', 'dificil', NULL, 'activa'),
 (40, '¿Quién fue la primera mujer en ganar un Nobel?', 'Historia', 'media', NULL, 'activa');
 
+-- Cultura - difícil
+(41, '¿Qué civilización construyó Machu Picchu?', 'Cultura', 'dificil', NULL, 'activa'),
+
+-- Arte - fácil
+(42, '¿Quién pintó "La Mona Lisa"?', 'Arte', 'facil', NULL, 'activa'),
+
+-- Matemática - difícil
+(43, '¿Cuál es la integral indefinida de 2x?', 'Matemática', 'dificil', NULL, 'activa');
+
+
 
 INSERT INTO `respuestas_juego` (`id_respuesta`, `id_pregunta`, `opcion_a`, `opcion_b`, `opcion_c`, `opcion_d`, `respuesta_correcta`) VALUES
 (1, 1, 'Madrid', 'París', 'Berlín', 'Lisboa', 'B'),

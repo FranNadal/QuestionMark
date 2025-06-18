@@ -17,6 +17,24 @@ class PerfilController
             $data["datos"] = $this->model->obtenerPerfil($_SESSION["user"]);
             $this->view->render("perfil", $data);
     }
+    public function public_view()
+    {
+        if (!isset($_GET['user'])) {
+            echo "Perfil no encontrado.";
+            exit;
+        }
+
+        $usuario = $_GET['user'];
+        $perfil = $this->model->obtenerPerfil($usuario);
+
+        if (!$perfil) {
+            echo "Perfil no encontrado.";
+            exit;
+        }
+
+        $data = $perfil;
+        $this->view->render("perfil_publico", $data);
+    }
 
     public function show()
     {

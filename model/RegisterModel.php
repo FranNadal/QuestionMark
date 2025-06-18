@@ -25,7 +25,7 @@ public function __construct($database){
 
         // Guardar imagen y validar resultado
         $resultadoImagen = $this->savePicture($foto_perfil);
-        if (!str_starts_with($resultadoImagen, "/img/profile/")) {
+        if (!str_starts_with($resultadoImagen, "view/img_page/")) {
             return $resultadoImagen; // Si no empieza con la ruta esperada, es un error
         }
 
@@ -40,15 +40,7 @@ public function __construct($database){
             return "Error al registrar el usuario.";
         }
 
-        //Enviar mail de validación
-   /* $asunto = "Confirma tu cuenta";
-    $link = "http://localhost/index.php?controller=register&method=validate&token=" . $token;
-    $mensaje = "Gracias por registrarte. Hacé clic en el siguiente enlace para validar tu cuenta:\n\n$link";
-    $cabeceras = "From: no-reply@tuapp.com\r\n";
 
-        if (!mail($mail, $asunto, $mensaje, $cabeceras)) {
-            return "Error al enviar el correo de confirmación.";
-        }*/
 // Enviar email con API de Brevo
         $link = "http://localhost/index.php?controller=register&method=validate&token=" . $token;
 
@@ -66,7 +58,7 @@ public function __construct($database){
 
         $headers = [
             "accept: application/json",
-            "api-key: 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", // Reemplazá por tu verdadera API Key de Brevo
+            "api-key: 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", // Reemplazá por tu verdadera API Key de Brevo
             "content-type: application/json"
         ];
 
@@ -149,27 +141,32 @@ public function __construct($database){
         }
 
         $fileExtension = strtolower(pathinfo($foto_perfil['name'], PATHINFO_EXTENSION));
-        $validExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+        $validExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
         if (!in_array($fileExtension, $validExtensions)) {
             return "Extensión de archivo no válida: " . $fileExtension;
         }
 
-        $id = $this->uuid();
-        $base = "";
-        $url = "/img/profile/profile_" . $id . "." . $fileExtension;
-        $filePath = "." . $url;
+        $id = $this->uuid(); // nombre único
+        $nuevoNombreArchivo = $id . "." . $fileExtension;
 
-        $directory = dirname($filePath);
-        if (!is_writable($directory)) {
-            return "El directorio no es escribible: " . $directory;
+        // Ruta absoluta para guardar la imagen
+        $carpetaDestino = "C:/xampp/htdocs/view/img_page/";
+        $rutaDestino = $carpetaDestino . $nuevoNombreArchivo;
+
+        // Verificar que la carpeta exista y sea escribible
+        if (!is_dir($carpetaDestino) || !is_writable($carpetaDestino)) {
+            return "El directorio no es escribible: " . $carpetaDestino;
         }
 
-        if (!move_uploaded_file($foto_perfil['tmp_name'], $filePath)) {
+        // Mover el archivo
+        if (!move_uploaded_file($foto_perfil['tmp_name'], $rutaDestino)) {
             return "Error al mover el archivo de imagen.";
         }
 
-        return $url; // ✅ OK, devuelve solo la ruta relativa
+        // Ruta relativa que se guarda en la base de datos y se usa en vistas
+        return "view/img_page/" . $nuevoNombreArchivo;
     }
+
 
 
     //funcion para crear nombres unicos y randoms para que  cuando vaya a guardar el nombre del archivo de la foto de perfil a la BD

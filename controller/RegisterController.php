@@ -15,11 +15,7 @@ public function register(){
 
     public function show()
     {
-        if (isset($_SESSION["user"])){
             $this->view->render("home");
-        }else{
-            $this->view->render("inicio");
-        }
     }
 
 
@@ -40,8 +36,6 @@ $nombre_usuario = $_POST['nombre_usuario'];
 $contrasenia = $_POST['contrasenia'];
 $repetirContrasenia = $_POST['repetir_contrasenia'];
 $foto_perfil = $_FILES['foto_perfil'] ?? null;
-
-
 
 
         $resultado = $this->model->register(
@@ -65,8 +59,6 @@ $foto_perfil = $_FILES['foto_perfil'] ?? null;
         }
 }
 
-
-
     public function validate() {
         if (!isset($_GET['token'])) {
             echo "Token inválido.";
@@ -83,12 +75,4 @@ $foto_perfil = $_FILES['foto_perfil'] ?? null;
             $this->view->render("validacion_error", ["error_message" => $resultado]); // muestra error
         }
     }
-
-
-
-
-
-
-
-
 }

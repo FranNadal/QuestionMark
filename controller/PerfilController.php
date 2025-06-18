@@ -14,44 +14,24 @@ class PerfilController
 
     public function view()
     {
-
-        if (isset($_SESSION['user'])) {
             $data["datos"] = $this->model->obtenerPerfil($_SESSION["user"]);
             $this->view->render("perfil", $data);
-        } else {
-            $this->redirectTo("/");
-
-        }
     }
 
     public function show()
     {
-
-        if (isset($_SESSION["user"])) {
             $this->view->render("home");
-        } else {
-            $this->view->render("inicio");
-        }
     }
 
     public function editar()
     {
-
-        if (isset($_SESSION['user'])) {
             $data["datos"] = $this->model->obtenerPerfil($_SESSION["user"]);
             $data["edicion_perfil"] = true;
             $this->view->render("perfil", $data);
-        } else {
-            $this->redirectTo("/");
-        }
     }
 
     public function guardar()
     {
-        if (!isset($_SESSION['user'])) {
-            $this->redirectTo("/");
-        }
-
         $usuario = $_SESSION['user'];
 
         $datos = [

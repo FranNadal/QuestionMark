@@ -9,13 +9,6 @@ class JugarController
         $this->view = $view;
         $this->model = $model;
     }
-    private function verificarSesionActiva() {
-
-        if (!isset($_SESSION['id_usuario'])) {
-            header("Location: /");
-            exit();
-        }
-    }
 
     public function ruleta()
     {
@@ -32,7 +25,6 @@ class JugarController
 
 
     public function view() {
-        $this->verificarSesionActiva();
 
         if (!isset($_SESSION['fecha_inicio_partida'])) {
             $_SESSION['fecha_inicio_partida'] = date('Y-m-d H:i:s');
@@ -85,8 +77,6 @@ class JugarController
 
     public function responder()
     {
-        $this->verificarSesionActiva();
-
 
         if (isset($_SESSION['tiempo_inicio_pregunta'])) {
             $tiempo = time() - $_SESSION['tiempo_inicio_pregunta'];
@@ -160,7 +150,6 @@ class JugarController
 
 
     private function terminarPartidaConMensaje($mensaje) {
-        $this->verificarSesionActiva();
 
         $id_usuario = $_SESSION['id_usuario'];
         $fecha_inicio = $_SESSION['fecha_inicio_partida'];

@@ -5,20 +5,12 @@ require_once("core/MustachePresenter.php");
 require_once("core/Router.php");
 
 require_once("controller/HomeController.php");
-require_once("controller/GroupController.php");
-require_once("controller/SongController.php");
-require_once("controller/TourController.php");
 require_once("controller/RegisterController.php");
 require_once("controller/LoginController.php");
 require_once("controller/PerfilController.php");
 require_once("controller/JugarController.php");
 require_once("controller/ApiController.php");
 
-
-
-require_once("model/GroupModel.php");
-require_once("model/SongModel.php");
-require_once("model/TourModel.php");
 require_once("model/RegisterModel.php");
 require_once("model/LoginModel.php");
 require_once("model/PerfilModel.php");
@@ -44,23 +36,9 @@ class Configuration
         return parse_ini_file(__DIR__ . "/configuration/config.ini", true);
     }
 
-    public function getSongController()
-    {
-        return new SongController(
-            new SongModel($this->getDatabase()),
-            $this->getViewer()
-        );
-    }
     public function getApiController()
     {
         return new ApiController();
-    }
-    public function getTourController()
-    {
-        return new TourController(
-            new TourModel($this->getDatabase()),
-            $this->getViewer()
-        );
     }
 
     public function getHomeController()
@@ -78,10 +56,6 @@ class Configuration
         return new JugarController(new JugarModel($this->getDatabase()), $this->getViewer());
     }
 
-    public function getGroupController()
-    {
-        return new GroupController(new GroupModel($this->getDatabase()), $this->getViewer());
-    }
     public final function getRegisterController(){
         return new RegisterController(new RegisterModel ($this->getDatabase()),$this->getViewer());
     }

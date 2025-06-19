@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ranking | Question Mark</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/view/styles/headerStyles.css">
+    <link rel="stylesheet" href="/view/styles/homeViewStyles.css">
+    <link rel="icon" type="image/x-icon" href="/view/img_page/icono_pagina.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+{{> header}}
+
+<div class="w3-content" style="max-width:1200px; margin-top:30px;">
+
+    <div class="card w3-center">
+        <h2 class="w3-text-purple"><i class="fa fa-trophy"></i> Ranking Global</h2>
+        <p>Los mejores jugadores de Question Mark</p>
+    </div>
+
+    <div class="card">
+        <table class="w3-table-all w3-hoverable">
+            <thead>
+            <tr class="w3-theme">
+                <th>#</th>
+                <th>Usuario</th>
+                <th>Puntos</th>
+            </tr>
+            </thead>
+            <tbody>
+{{#ranking}}
+            <tr>
+                <td>#{{posicion}}</td>
+                <td><strong>{{usuario}}</strong></td>
+                <td>{{puntaje}}</td>
+            </tr>
+{{/ranking}}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="w3-center">
+        <a href="/home">
+            <button class="w3-button w3-theme w3-round-large w3-margin-top">
+                <i class="fa fa-arrow-left"></i> Volver al inicio
+            </button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,7 +1,8 @@
 <?php
 
-class HomeController
+class RankingController
 {
+
     private $view;
     private $model;
 
@@ -13,12 +14,13 @@ class HomeController
 
     public function view()
     {
-            $this->view->render("home");
+        $data["ranking"] = $this->model->obtenerDatosRanking();
+        $this->view->render("ranking", $data);
     }
 
     public function show()
     {
-            $this->view->render("home");
+        $this->view->render("home");
     }
 
     private function redirectTo($str)

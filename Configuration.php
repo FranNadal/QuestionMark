@@ -4,17 +4,21 @@ require_once("core/FilePresenter.php");
 require_once("core/MustachePresenter.php");
 require_once("core/Router.php");
 
+require_once("controller/InicioController.php");
 require_once("controller/HomeController.php");
 require_once("controller/RegisterController.php");
 require_once("controller/LoginController.php");
 require_once("controller/PerfilController.php");
 require_once("controller/JugarController.php");
 require_once("controller/ApiController.php");
+require_once("controller/RankingController.php");
 
+require_once("model/HomeModel.php");
 require_once("model/RegisterModel.php");
 require_once("model/LoginModel.php");
 require_once("model/PerfilModel.php");
 require_once("model/JugarModel.php");
+require_once("model/RankingModel.php");
 include_once('vendor/mustache/src/Mustache/Autoloader.php');
 
 class Configuration
@@ -41,9 +45,19 @@ class Configuration
         return new ApiController();
     }
 
+    public function getInicioController()
+    {
+        return new InicioController($this->getViewer());
+    }
+
     public function getHomeController()
     {
-        return new HomeController($this->getViewer());
+        return new HomeController(new HomeModel($this->getDatabase()), $this->getViewer());
+    }
+
+    public function getRankingController()
+    {
+        return new RankingController(new RankingModel($this->getDatabase()), $this->getViewer());
     }
 
     public function getPerfilController()
@@ -65,7 +79,7 @@ class Configuration
     }
     public function getRouter()
     {
-        return new Router("getHomeController", "show", $this);
+        return new Router("getInicioController", "show", $this);
     }
 
     public function getViewer()

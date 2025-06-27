@@ -56,9 +56,10 @@ public function __construct($database){
                           <p><a href='$link'>$link</a></p>"
         ];
 
+
         $headers = [
             "accept: application/json",
-            "api-key: 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", // Reemplazá por tu verdadera API Key de Brevo
+            "api-key: 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",
             "content-type: application/json"
         ];
 

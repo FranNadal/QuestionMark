@@ -183,3 +183,33 @@ INSERT INTO `respuestas_juego` (`id_respuesta`, `id_pregunta`, `opcion_a`, `opci
 (38, 38, 'Violín', 'Flauta', 'Piano', 'Clarinete', 'C'),
 (39, 39, 'Boca Juniors', 'River Plate', 'Peñarol', 'Independiente', 'A'),
 (40, 40, 'Marie Curie', 'Rosalind Franklin', 'Ada Lovelace', 'Emilie du Châtelet', 'A');
+
+INSERT INTO Usuario (
+    nombre_completo,
+    ano_nacimiento,
+    sexo,
+    pais,
+    ciudad,
+    email,
+    nombre_usuario,
+    contrasenia,
+    foto_perfil,
+    rol,
+    cuenta_validada,
+    fecha_registro,
+    token_validacion
+) VALUES (
+             'Editor',
+             1990,
+             'M',
+             'Argentina',
+             'Buenos Aires',
+             'editor@gmail.com',
+             'editor',
+             '123',
+             NULL,
+             'editor',
+             1,
+             NOW(),
+             NULL
+         );

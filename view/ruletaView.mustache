@@ -25,6 +25,20 @@
 <body>
 
 {{> header}}
+{{#mensaje_exito}}
+    <div class="w3-panel w3-green w3-display-container w3-animate-opacity">
+        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+        {{mensaje_exito}}
+    </div>
+{{/mensaje_exito}}
+
+{{#mensaje_error}}
+    <div class="w3-panel w3-red w3-display-container w3-animate-opacity">
+        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+        {{mensaje_error}}
+    </div>
+{{/mensaje_error}}
+
 
 <div class="w3-container w3-center w3-padding-large">
     <h2>¡Girá la ruleta para elegir categoría!</h2>
@@ -48,7 +62,15 @@
 </div>
 
 <script>
-    const options = [
+
+        setTimeout(() => {
+        document.querySelectorAll('.w3-panel').forEach(panel => {
+            panel.style.display = 'none';
+        });
+    }, 5000);
+
+
+const options = [
         { id: 1, nombre: "Historia" },
         { id: 2, nombre: "Ciencia" },
         { id: 3, nombre: "Deportes" },

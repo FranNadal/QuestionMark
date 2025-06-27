@@ -24,23 +24,28 @@ class LoginController
         exit();
     }
 
-    public function doLogin(){
+    public function doLogin() {
         $email = $_POST['email'];
         $contrasenia = $_POST['contrasenia'];
 
-        $resultado = $this->model->loguearse($email,$contrasenia);
+        $resultado = $this->model->loguearse($email, $contrasenia);
 
-        if (is_string($resultado) ){
+        if (is_string($resultado)) {
             $this->view->render('login', ['error_message' => $resultado]);
-
-        }else{
-
+        } else {
             $_SESSION['user'] = $resultado["nombre_usuario"];
             $_SESSION['id_usuario'] = $resultado["id_usuario"];
+            $_SESSION['rol'] = $resultado["rol"]; // guardamos el rol por si lo necesitás después
 
-            $this->redirectTo('/home/view');
+            // Redirigir según el rol
+            if ($resultado["rol"] === "editor") {
+                $this->redirectTo('/editor/viewEditor');
+            } else {
+                $this->redirectTo('/home/view');
+            }
         }
     }
+
 
     public function logout()
     {

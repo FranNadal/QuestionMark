@@ -231,6 +231,10 @@ $this->database->execute($sql, [$id_usuario, $fecha_inicio, $fecha_fin, $puntaje
         $resultado = $this->database->fetchOne($sql, [$categoria, $dificultad, $id_usuario]);
         return $resultado && $resultado['cantidad'] > 0;
     }
+    public function reportarPregunta($idPregunta, $idUsuario, $motivo) {
+        $sql = "INSERT INTO reporte_pregunta (id_pregunta, id_usuario, motivo) VALUES (?, ?, ?)";
+        $this->database->execute($sql, [$idPregunta, $idUsuario, $motivo]);
+    }
 
 }
 

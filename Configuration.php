@@ -12,6 +12,7 @@ require_once("controller/PerfilController.php");
 require_once("controller/JugarController.php");
 require_once("controller/ApiController.php");
 require_once("controller/RankingController.php");
+require_once ("controller/EditorController.php");
 
 require_once("model/HomeModel.php");
 require_once("model/RegisterModel.php");
@@ -19,6 +20,7 @@ require_once("model/LoginModel.php");
 require_once("model/PerfilModel.php");
 require_once("model/JugarModel.php");
 require_once("model/RankingModel.php");
+require_once ("model/EditorModel.php");
 include_once('vendor/mustache/src/Mustache/Autoloader.php');
 
 class Configuration
@@ -53,6 +55,10 @@ class Configuration
     public function getHomeController()
     {
         return new HomeController(new HomeModel($this->getDatabase()), $this->getViewer());
+    }
+    public function getEditorController()
+    {
+        return new EditorController(new EditorModel($this->getDatabase()), $this->getViewer());
     }
 
     public function getRankingController()

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel del Editor - QuestionMark</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/view/styles/headerStyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/view/img_page/icono_pagina.ico" />
+    <style>
+        .action-buttons form {
+            display: inline-block;
+            margin: 0;
+        }
+        .action-buttons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 5px 10px;
+        }
+        /* Botones colores */
+        .btn-aprobar { color: green; }
+        .btn-rechazar { color: red; }
+        .btn-modificar { color: blue; }
+    </style>
+</head>
+<body>
+
+{{> headerEditor}}
+
+<div class="w3-content" style="max-width:1200px; margin-top:30px;">
+
+    <div class="card">
+        <h3 class="w3-text-purple">Panel del Editor</h3>
+        <p>Gestioná preguntas sugeridas y reportadas.</p>
+
+        <table class="w3-table-all w3-hoverable w3-margin-top">
+            <thead>
+            <tr class="w3-theme">
+                <th>Pregunta</th>
+                <th>Motivo del Reporte</th> <!-- NUEVA COLUMNA -->
+                <th>Aprobar</th>
+                <th>Rechazar</th>
+                <th>Modificar</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#preguntas}}
+                <tr>
+                    <td>{{texto}}</td>
+                    <td>{{motivo}}</td> <!-- NUEVA COLUMNA -->
+                    <td class="action-buttons">
+                        <form action="/editor/aprobar" method="POST">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <button type="submit" class="btn-aprobar" title="Aprobar">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="action-buttons">
+                        <form action="/editor/rechazar" method="POST">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <button type="submit" class="btn-rechazar" title="Rechazar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="action-buttons">
+                        <form action="/editor/modificar" method="POST">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="texto" value="{{texto}}">
+                            <button type="submit" class="btn-modificar" title="Modificar">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {{/preguntas}}
+            {{^preguntas}}
+                <tr>
+                    <td colspan="5" class="w3-center">No hay preguntas pendientes.</td>
+                </tr>
+            {{/preguntas}}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

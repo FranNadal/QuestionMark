@@ -25,18 +25,19 @@ public function register(){
         exit();
     }
 
-public function doRegister(){
-$nombre_completo = $_POST['nombre_completo'];
-$ano_nacimiento= $_POST['ano_nacimiento'];
-$sexo= $_POST['sexo'];
-$pais= $_POST['pais'];
-$ciudad= $_POST['ciudad'];
-$mail = $_POST['email'];
-$nombre_usuario = $_POST['nombre_usuario'];
-$contrasenia = $_POST['contrasenia'];
-$repetirContrasenia = $_POST['repetir_contrasenia'];
-$foto_perfil = $_FILES['foto_perfil'] ?? null;
+    public function doRegister() {
+        $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
 
+        $nombre_completo = $_POST['nombre_completo'];
+        $ano_nacimiento= $_POST['ano_nacimiento'];
+        $sexo= $_POST['sexo'];
+        $pais= $_POST['pais'];
+        $ciudad= $_POST['ciudad'];
+        $mail = $_POST['email'];
+        $nombre_usuario = $_POST['nombre_usuario'];
+        $contrasenia = $_POST['contrasenia'];
+        $repetirContrasenia = $_POST['repetir_contrasenia'];
+        $foto_perfil = $_FILES['foto_perfil'] ?? null;
 
         $resultado = $this->model->register(
             $nombre_completo,
@@ -51,13 +52,24 @@ $foto_perfil = $_FILES['foto_perfil'] ?? null;
             $foto_perfil
         );
 
-        if (is_string($resultado) ){
-            $this->view->render('register', ['error_message' => $resultado]);
-        }else{
-            $this->redirectTo("/login/login");
-
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            if (is_string($resultado)) {
+                echo json_encode(['success' => false, 'error' => $resultado]);
+            } else {
+                echo json_encode(['success' => true]);
+            }
+            exit;
         }
-}
+
+        // En caso de ser POST tradicional
+       /* if (is_string($resultado)) {
+            $this->view->render('register', ['error_message' => $resultado]);
+        } else {
+            $this->redirectTo("/login/login");
+        }*/
+    }
+
 
     public function validate() {
         if (!isset($_GET['token'])) {
@@ -71,8 +83,6 @@ $foto_perfil = $_FILES['foto_perfil'] ?? null;
 
         if ($resultado === true) {
             $this->view->render("validacion_exitosa"); // muestra una vista de éxito
-        } else {
-            $this->view->render("validacion_error", ["error_message" => $resultado]); // muestra error
         }
     }
 }

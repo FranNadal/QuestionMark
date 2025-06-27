@@ -13,13 +13,23 @@ class JugarController
     public function ruleta()
     {
         if (isset($_GET['categoria'])) {
-
             $_SESSION['categoria_seleccionada'] = $_GET['categoria'];
             header('Location: /jugar/view');
             exit;
         }
 
-        $this->view->render('ruleta');  // Mostrar animación la primera vez
+        // Capturar mensajes de sesión
+        $mensajeExito = $_SESSION['mensaje_exito'] ?? null;
+        $mensajeError = $_SESSION['mensaje_error'] ?? null;
+
+        // Limpiar después de usarlos
+        unset($_SESSION['mensaje_exito'], $_SESSION['mensaje_error']);
+
+        // Pasarlos a la vista
+        $this->view->render('ruleta', [
+            'mensaje_exito' => $mensajeExito,
+            'mensaje_error' => $mensajeError
+        ]);
     }
 
 
@@ -182,9 +192,36 @@ class JugarController
 
 
 
-    public function reporte(){
+    public function reporte() {
+        if (!isset($_POST['id_pregunta']) || !isset($_POST['motivo']) || empty(trim($_POST['motivo']))) {
+            // Si faltan datos o motivo vacío
+            $_SESSION['mensaje_error'] = "Debe ingresar un motivo para reportar la pregunta.";
+            header("Location: /jugar/ruleta");
+            exit();
+        }
 
+        $idPregunta = $_POST['id_pregunta'];
+        $motivo = trim($_POST['motivo']);
+        $idUsuario = $_SESSION['id_usuario'] ?? null;
+
+        if (!$idUsuario) {
+            $_SESSION['mensaje_error'] = "Debe iniciar sesión para reportar una pregunta.";
+            header("Location: /login");
+            exit();
+        }
+
+        // Guardar reporte en la base de datos
+        try {
+            $this->model->reportarPregunta($idPregunta, $idUsuario, $motivo);
+            $_SESSION['mensaje_exito'] = "Reporte enviado correctamente.";
+        } catch (Exception $e) {
+            $_SESSION['mensaje_error'] = "Hubo un error al enviar el reporte.";
+        }
+
+        header("Location: /jugar/ruleta"); // O a donde quieras volver
+        exit();
     }
+
 
 
 

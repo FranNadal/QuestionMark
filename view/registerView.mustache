@@ -118,6 +118,40 @@
         // Cargar datos iniciales
         actualizarCampos(marker.getLatLng());
     });
+
+    //ajax
+    document.querySelector("form").addEventListener("submit", async function (e) {
+        e.preventDefault(); // Evita el envío tradicional
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch("/index.php?controller=register&method=doRegister", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            });
+
+            const result = await response.json(); // Esperamos JSON como respuesta
+
+            if (result.success) {
+                alert("Registro exitoso. Serás redirigido al login.");
+                window.location.href = "/login/login";
+            } else {
+                // Mostrar mensaje de error del backend
+                document.querySelector(".form-card").insertAdjacentHTML("afterbegin",
+                        `<div class="w3-text-red" style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
+        ${result.error}
+    </div>`);
+
+            }
+        } catch (err) {
+            alert("Error en la conexión con el servidor.");
+        }
+    });
 </script>
 
 </body>

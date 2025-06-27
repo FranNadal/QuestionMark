@@ -26,4 +26,8 @@ class HomeController
         header("location:" . $str);
         exit();
     }
+    public function vieweditor()
+    {
+        $this->view->render("homeEditor");
+    }
 }

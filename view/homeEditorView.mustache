@@ -53,28 +53,31 @@
                     <td>{{texto}}</td>
                     <td>{{motivo}}</td> <!-- NUEVA COLUMNA -->
                     <td class="action-buttons">
-                        <form action="/editor/aprobar" method="POST">
-                            <input type="hidden" name="id" value="{{id}}">
+                        <form action="/editor/aprobarReportada" method="POST">
+                            <input type="hidden" name="id_pregunta" value="{{id}}">
                             <button type="submit" class="btn-aprobar" title="Aprobar">
                                 <i class="fa fa-check"></i>
                             </button>
                         </form>
                     </td>
                     <td class="action-buttons">
-                        <form action="/editor/rechazar" method="POST">
-                            <input type="hidden" name="id" value="{{id}}">
+                        <form action="/editor/rechazarReportada" method="POST">
+                        <input type="hidden" name="id_pregunta" value="{{id}}">
+                            <input type="hidden" name="id_usuario" value="{{id_usuario}}">
                             <button type="submit" class="btn-rechazar" title="Rechazar">
                                 <i class="fa fa-times"></i>
                             </button>
                         </form>
+
                     </td>
                     <td class="action-buttons">
-                        <form action="/editor/modificar" method="POST">
-                            <input type="hidden" name="id" value="{{id}}">
-                            <input type="hidden" name="texto" value="{{texto}}">
+                        <form action="/editor/editar" method="GET">
+                            <input type="hidden" name="id_pregunta" value="{{id}}">
                             <button type="submit" class="btn-modificar" title="Modificar">
                                 <i class="fa fa-edit"></i>
                             </button>
+                        </form>
+
                         </form>
                     </td>
                 </tr>

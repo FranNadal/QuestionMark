@@ -86,8 +86,20 @@ CREATE TABLE `usuario_estadisticas` (
                                         PRIMARY KEY (`id_usuario`),
                                         FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
 )
-
-
+-- Tabla de preguntas que suguieren los usuarios
+CREATE TABLE `preguntas_sugeridas` (
+                                       `id` int(11) NOT NULL,
+                                       `texto` varchar(255) NOT NULL,
+                                       `opcion_a` varchar(255) NOT NULL,
+                                       `opcion_b` varchar(255) NOT NULL,
+                                       `opcion_c` varchar(255) NOT NULL,
+                                       `opcion_d` varchar(255) NOT NULL,
+                                       `respuesta_correcta` enum('A','B','C','D') NOT NULL,
+                                       `categoria` enum('Arte','Ciencia','Cultura','Deporte','Geografía','Historia','Literatura','Matematicas') NOT NULL,
+                                       `id_usuario` int(11) NOT NULL,
+                                       `estado` enum('pendiente','activa','rechazada') DEFAULT 'pendiente',
+                                       `dificultad` enum('facil','media','dificil') DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `preguntas_juego` (`id_pregunta`, `texto`, `categoria`, `dificultad`, `creada_por`, `estado`) VALUES
 (1, '¿Cuál es la capital de Francia?', 'Geografía', 'facil', NULL, 'activa'),
@@ -109,7 +121,7 @@ INSERT INTO `preguntas_juego` (`id_pregunta`, `texto`, `categoria`, `dificultad`
 (17, '¿Cuál es el país más grande del mundo?', 'Geografía', 'media', NULL, 'activa'),
 (18, '¿Qué animal es conocido como el rey de la selva?', 'Cultura', 'facil', NULL, 'activa'),
 (19, '¿Cuál es el metal más ligero?', 'Ciencia', 'media', NULL, 'activa'),
-(20, '¿Qué país ganó el Mundial de fútbol en 2018?', 'Deportes', 'media', NULL, 'activa');
+(20, '¿Qué país ganó el Mundial de fútbol en 2018?', 'Deportes', 'media', NULL, 'activa'),
 (21, '¿Cuál es la capital de Mongolia?', 'Geografía', 'dificil', NULL, 'activa'),
 (22, '¿Quién escribió "La montaña mágica"?', 'Literatura', 'dificil', NULL, 'activa'),
 (23, '¿Cuál es la constante de Planck?', 'Ciencia', 'dificil', NULL, 'activa'),
@@ -129,7 +141,7 @@ INSERT INTO `preguntas_juego` (`id_pregunta`, `texto`, `categoria`, `dificultad`
 (37, '¿Qué número es primo: 51, 53 o 55?', 'Matemática', 'media', NULL, 'activa'),
 (38, '¿Qué instrumento utilizaba Beethoven a pesar de su sordera?', 'Arte', 'media', NULL, 'activa'),
 (39, '¿Qué equipo ha ganado más Copas Libertadores?', 'Deportes', 'dificil', NULL, 'activa'),
-(40, '¿Quién fue la primera mujer en ganar un Nobel?', 'Historia', 'media', NULL, 'activa');
+(40, '¿Quién fue la primera mujer en ganar un Nobel?', 'Historia', 'media', NULL, 'activa'),
 
 -- Cultura - difícil
 (41, '¿Qué civilización construyó Machu Picchu?', 'Cultura', 'dificil', NULL, 'activa'),
@@ -162,7 +174,7 @@ INSERT INTO `respuestas_juego` (`id_respuesta`, `id_pregunta`, `opcion_a`, `opci
 (17, 17, 'Canadá', 'Estados Unidos', 'China', 'Rusia', 'D'),
 (18, 18, 'Elefante', 'Tigre', 'León', 'Pantera', 'C'),
 (19, 19, 'Hierro', 'Aluminio', 'Litio', 'Plomo', 'C'),
-(20, 20, 'Brasil', 'Alemania', 'Francia', 'Argentina', 'C');
+(20, 20, 'Brasil', 'Alemania', 'Francia', 'Argentina', 'C'),
 (21, 21, 'Ulaanbaatar', 'Bakú', 'Tiflis', 'Hanoi', 'A'),
 (22, 22, 'Franz Kafka', 'Thomas Mann', 'Hermann Hesse', 'Albert Camus', 'B'),
 (23, 23, '6.626 × 10⁻³⁴ Js', '3.00 × 10⁸ m/s', '9.81 m/s²', '1.602 × 10⁻¹⁹ C', 'A'),

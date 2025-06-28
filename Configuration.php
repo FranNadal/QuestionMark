@@ -23,6 +23,10 @@ require_once("model/RankingModel.php");
 require_once ("model/EditorModel.php");
 include_once('vendor/mustache/src/Mustache/Autoloader.php');
 
+
+require_once("controller/SugerenciasController.php");
+require_once("model/SugerenciasModel.php");
+
 class Configuration
 {
     public function getDatabase()
@@ -93,4 +97,13 @@ class Configuration
         //return new FileView();
         return new MustachePresenter("view");
     }
+
+    public function getSugerenciasController()
+    {
+        return new SugerenciasController(
+            new SugerenciasModel($this->getDatabase()),
+            $this->getViewer()
+        );
+    }
+
 }

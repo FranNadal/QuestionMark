@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Pregunta</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<div class="w3-container w3-padding-32">
+    <h2>Editar Pregunta</h2>
+
+    <form action="/index.php?controller=editor&method=modificarPregunta" method="POST">
+    <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
+
+        <label>Texto de la Pregunta</label>
+        <input class="w3-input w3-border w3-margin-bottom" type="text" name="nuevo_texto" value="{{pregunta.texto}}" required>
+
+        <label>Opción A</label>
+        <input class="w3-input w3-border" type="text" name="respuestas[opcion_a]" value="{{respuestas.opcion_a}}" required>
+
+        <label>Opción B</label>
+        <input class="w3-input w3-border" type="text" name="respuestas[opcion_b]" value="{{respuestas.opcion_b}}" required>
+
+        <label>Opción C</label>
+        <input class="w3-input w3-border" type="text" name="respuestas[opcion_c]" value="{{respuestas.opcion_c}}" required>
+
+        <label>Opción D</label>
+        <input class="w3-input w3-border" type="text" name="respuestas[opcion_d]" value="{{respuestas.opcion_d}}" required>
+
+        <label>Respuesta Correcta</label>
+        <select class="w3-select w3-border" name="respuesta_correcta" required>
+            <option value="A" {{#respuestas.correcta_A}}selected{{/respuestas.correcta_A}}>A</option>
+            <option value="B" {{#respuestas.correcta_B}}selected{{/respuestas.correcta_B}}>B</option>
+            <option value="C" {{#respuestas.correcta_C}}selected{{/respuestas.correcta_C}}>C</option>
+            <option value="D" {{#respuestas.correcta_D}}selected{{/respuestas.correcta_D}}>D</option>
+        </select>
+
+        <br><br>
+        <button class="w3-button w3-purple" type="submit">Guardar Cambios</button>
+        <a class="w3-button w3-gray" href="/editor/viewEditor">Cancelar</a>
+    </form>
+</div>
+
+</body>
+</html>

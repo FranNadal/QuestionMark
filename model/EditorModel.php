@@ -42,6 +42,9 @@ class EditorModel
     {
         $sql = "UPDATE preguntas_juego SET estado = 'desactivada' WHERE id_pregunta = ?";
         $this->database->execute($sql, [$idPregunta]);
+
+        $sqlborrar = "DELETE FROM reporte_pregunta WHERE id_pregunta = ?";
+        $this->database->execute($sqlborrar, [$idPregunta]);
     }
 
 

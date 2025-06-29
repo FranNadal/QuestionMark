@@ -15,7 +15,9 @@ class EditorController
     public function viewEditor()
     {
         $preguntas = $this->model->obtenerTodasLasPreguntasReportadas();
-        $this->view->render("homeEditor", ["preguntas" => $preguntas]);
+        $preguntasSugeridas = $this->model->obtenerTodasLasPreguntasSugeridas();
+        $this->view->render("homeEditor", ["preguntas" => $preguntas,
+            'preguntas_sugeridas' => $preguntasSugeridas]);
     }
 
     // Da de alta una pregunta (activarla)
@@ -63,6 +65,17 @@ class EditorController
             $this->model->aprobarPreguntaSugerida($id);
         }
         header("Location: /editor/viewEditor");
+    }
+    public function desaprobarSugerida()
+    {
+        $idPregunta = $_POST['id_pregunta'] ?? null;
+
+        if ($idPregunta) {
+            $this->model->eliminarPreguntaSugerida($idPregunta);
+        }
+
+        header("Location: /editor/viewEditor");
+        exit;
     }
 
     // Rechaza un reporte eliminando el reporte hecho por un usuario para una pregunta específica

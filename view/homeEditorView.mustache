@@ -90,7 +90,49 @@
             </tbody>
         </table>
     </div>
+    <!-- Sección de preguntas sugeridas -->
+    <div class="card w3-margin-top">
+        <h3 class="w3-text-purple">Preguntas sugeridas por el usuario</h3>
+        <p>Revisá las nuevas preguntas enviadas por los jugadores.</p>
 
+        <table class="w3-table-all w3-hoverable w3-margin-top">
+            <thead>
+            <tr class="w3-theme">
+                <th>Pregunta</th>
+                <th>Aprobar</th>
+                <th>Rechazar</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#preguntas_sugeridas}}
+                <tr>
+                    <td>{{texto}}</td>
+                    <td class="action-buttons">
+                        <form action="/editor/aprobarSugerida" method="POST">
+                            <input type="hidden" name="id_pregunta" value="{{id}}">
+                            <button type="submit" class="btn-aprobar" title="Aprobar">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="action-buttons">
+                        <form action="/editor/desaprobarSugerida" method="POST">
+                            <input type="hidden" name="id_pregunta" value="{{id}}">
+                            <button type="submit" class="btn-rechazar" title="Rechazar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {{/preguntas_sugeridas}}
+            {{^preguntas_sugeridas}}
+                <tr>
+                    <td colspan="3" class="w3-center">No hay preguntas sugeridas pendientes.</td>
+                </tr>
+            {{/preguntas_sugeridas}}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 </body>

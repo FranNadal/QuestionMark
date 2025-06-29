@@ -26,7 +26,21 @@ class EditorModel
             ORDER BY rp.fecha_reporte DESC";
 
         return $this->database->fetchAll($sql);
-    }
+    }public function obtenerTodasLasPreguntasSugeridas()
+{
+    $sql = "SELECT 
+                ps.id AS id,
+                ps.texto,
+                u.nombre_usuario AS sugerido_por,
+                u.id_usuario
+            FROM preguntas_sugeridas ps
+            INNER JOIN usuario u ON ps.id_usuario = u.id_usuario
+            WHERE ps.estado = 'pendiente'
+            ORDER BY ps.id DESC";
+
+    return $this->database->fetchAll($sql);
+}
+
 
     public function rechazarPreguntaReportada($idPregunta, $idUsuario)
     {
@@ -101,5 +115,51 @@ class EditorModel
 //        $this->database->execute($sql, [$idPregunta]);
 //    }
 
+    public function aprobarPreguntaSugerida($idPreguntaSugerida)
+    {
+        // Obtener la sugerencia
+        $sqlSelect = "SELECT * FROM preguntas_sugeridas WHERE id = ?";
+        $sugerencia = $this->database->fetchOne($sqlSelect, [$idPreguntaSugerida]);
+
+        if (!$sugerencia) {
+            return;
+        }
+
+        // Insertar en preguntas_juego
+        $sqlInsertPregunta = "INSERT INTO preguntas_juego (texto, categoria, dificultad, creada_por, estado)
+                          VALUES (?, ?, ?, ?, 'activa')";
+        $this->database->execute($sqlInsertPregunta, [
+            $sugerencia['texto'],
+            $sugerencia['categoria'],
+            $sugerencia['dificultad'] ?? 'media',
+            $sugerencia['id_usuario']
+        ]);
+
+        // Obtener el ID generado para la nueva pregunta
+        $idNuevaPregunta = $this->database->getLastInsertId();
+
+        // Insertar respuestas
+        $sqlInsertRespuestas = "INSERT INTO respuestas_juego (id_pregunta, opcion_a, opcion_b, opcion_c, opcion_d, respuesta_correcta)
+                            VALUES (?, ?, ?, ?, ?, ?)";
+        $this->database->execute($sqlInsertRespuestas, [
+            $idNuevaPregunta,
+            $sugerencia['opcion_a'],
+            $sugerencia['opcion_b'],
+            $sugerencia['opcion_c'],
+            $sugerencia['opcion_d'],
+            $sugerencia['respuesta_correcta']
+        ]);
+
+        // Eliminar de preguntas_sugeridas
+        $sqlDelete = "DELETE FROM preguntas_sugeridas WHERE id = ?";
+        $this->database->execute($sqlDelete, [$idPreguntaSugerida]);
+    }
+
+
+    public function eliminarPreguntaSugerida($id)
+    {
+        $sql = "DELETE FROM preguntas_sugeridas WHERE id = ?";
+        $this->database->execute($sql, [$id]);
+    }
 
 }

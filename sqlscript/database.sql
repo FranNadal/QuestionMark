@@ -86,9 +86,8 @@ CREATE TABLE `usuario_estadisticas` (
                                         PRIMARY KEY (`id_usuario`),
                                         FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
 )
--- Tabla de preguntas que suguieren los usuarios
 CREATE TABLE `preguntas_sugeridas` (
-                                       `id` int(11) NOT NULL,
+                                       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                        `texto` varchar(255) NOT NULL,
                                        `opcion_a` varchar(255) NOT NULL,
                                        `opcion_b` varchar(255) NOT NULL,
@@ -100,6 +99,7 @@ CREATE TABLE `preguntas_sugeridas` (
                                        `estado` enum('pendiente','activa','rechazada') DEFAULT 'pendiente',
                                        `dificultad` enum('facil','media','dificil') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 INSERT INTO `preguntas_juego` (`id_pregunta`, `texto`, `categoria`, `dificultad`, `creada_por`, `estado`) VALUES
 (1, '¿Cuál es la capital de Francia?', 'Geografía', 'facil', NULL, 'activa'),

@@ -13,7 +13,13 @@ class HomeController
 
     public function view()
     {
-            $this->view->render("home");
+
+        //es el mensaje de exito de la pregunta sugerida
+        $mensaje = $_SESSION['mensaje_exito'] ?? null;
+        unset($_SESSION['mensaje_exito']);
+        $this->view->render("home", [
+            'mensaje_exito' => $mensaje,
+        ]);
     }
 
     public function show()

@@ -45,8 +45,8 @@ class SugerenciasController
                 'respuesta_correcta' => $respuestaCorrecta,
                 'categoria' => $categoria,
             ]);
-
-            header("Location: /index.php?controller=sugerencias&method=sugerirPregunta&msg=gracias");
+            $_SESSION['mensaje_exito'] = "Pregunta enviada correctamente.";
+            header("Location: /home/view"); // O a donde quieras volver
             exit;
         } else {
             header("Location: /index.php?controller=sugerencias&method=sugerirPregunta&msg=error");

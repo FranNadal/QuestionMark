@@ -58,6 +58,10 @@ class Database
 
 
 
+    public function getLastInsertId()
+    {
+        return $this->conn->insert_id;
+    }
 
 
     function __destruct()

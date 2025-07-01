@@ -225,3 +225,48 @@ INSERT INTO Usuario (
              NOW(),
              NULL
          );
+INSERT INTO Usuario (
+    nombre_completo,
+    ano_nacimiento,
+    sexo,
+    pais,
+    ciudad,
+    email,
+    nombre_usuario,
+    contrasenia,
+    foto_perfil,
+    rol,
+    cuenta_validada,
+    fecha_registro,
+    token_validacion
+) VALUES (
+             'Admin',
+             1990,
+             'M',
+             'Argentina',
+             'Buenos Aires',
+             'admin@gmail.com',
+             'admin',
+             '123',
+             NULL,
+             'administrador',
+             1,
+             NOW(),
+             NULL
+         );
+
+-- agrego usuarios para aprovechar los graficos
+
+INSERT INTO Usuario
+(nombre_completo, ano_nacimiento, sexo, pais, ciudad, email, contrasenia, nombre_usuario, foto_perfil, rol, cuenta_validada)
+VALUES
+    ('Ana López', 2010, 'F', 'Argentina', 'Buenos Aires', 'ana.lopez@example.com', 'pass123', 'analopez', NULL, 'usuario', 1),
+    ('Bruno Martínez', 1985, 'M', 'Argentina', 'Córdoba', 'bruno.martinez@example.com', 'pass123', 'brunom', NULL, 'usuario', 1),
+    ('Carla Gómez', 1950, 'F', 'Chile', 'Santiago', 'carla.gomez@example.com', 'pass123', 'carlag', NULL, 'usuario', 1),
+    ('Diego Fernández', 2005, 'M', 'Uruguay', 'Montevideo', 'diego.fernandez@example.com', 'pass123', 'dfernandez', NULL, 'usuario', 1),
+    ('Elena Ruiz', 1990, 'F', 'Argentina', 'Rosario', 'elena.ruiz@example.com', 'pass123', 'elenar', NULL, 'usuario', 1),
+    ('Facundo Navarro', 1975, 'M', 'Paraguay', 'Asunción', 'facundo.navarro@example.com', 'pass123', 'facunavarro', NULL, 'usuario', 1),
+    ('Gabriela Sánchez', 1960, 'F', 'Argentina', 'Mendoza', 'gabriela.sanchez@example.com', 'pass123', 'gabsanchez', NULL, 'usuario', 1),
+    ('Hugo Díaz', 2015, 'M', 'Chile', 'Valparaíso', 'hugo.diaz@example.com', 'pass123', 'hugodiaz', NULL, 'usuario', 1),
+    ('Irene Torres', 1988, 'N', 'Argentina', 'La Plata', 'irene.torres@example.com', 'pass123', 'irenet', NULL, 'usuario', 1),
+    ('Javier Molina', 1945, 'M', 'Uruguay', 'Salto', 'javier.molina@example.com', 'pass123', 'javmolina', NULL, 'usuario', 1);

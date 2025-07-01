@@ -40,7 +40,10 @@ class LoginController
             // Redirigir según el rol
             if ($resultado["rol"] === "editor") {
                 $this->redirectTo('/editor/viewEditor');
-            } else {
+            } else if($resultado["rol"] === "administrador") {
+                $this->redirectTo('/admin/viewAdmin');
+
+            }else{
                 $this->redirectTo('/home/view');
             }
         }

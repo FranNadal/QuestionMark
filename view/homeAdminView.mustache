@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel de Administrador - QuestionMark</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/view/styles/headerStyles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+</head>
+<body>
+
+{{> headerAdmin}}
+
+
+<div class="w3-content" style="max-width:1200px; margin-top:30px;">
+    <div class="w3-card-4 w3-padding w3-margin-bottom">
+        <h2 class="w3-text-purple">Resumen de Estadísticas</h2>
+        <ul class="w3-ul">
+            <li><b>Total de Jugadores:</b> {{total_users}}</li>
+            <li><b>Total de Partidas:</b> {{total_games}}</li>
+            <li><b>Total de Preguntas:</b> {{total_questions}}</li>
+            <li><b>Total de Preguntas Creadas:</b> {{total_questions_created}}</li>
+            <li><b>Usuarios Nuevos:</b> {{total_users_created}}</li>
+            <li><b>Promedio de Edad:</b> {{promedio_edad}}</li>
+            <li><b>Promedio de Aciertos:</b> {{ratio_aciertos}}%</li>
+        </ul>
+    </div>
+    <div class="w3-card w3-padding w3-margin-bottom">
+        <label for="filtro-estadisticas">Filtrar por:</label>
+        <select id="filtro-estadisticas" class="w3-select w3-border" style="max-width: 250px;">
+            <option value="dia">Hoy</option>
+            <option value="semana">Esta semana</option>
+            <option value="mes" selected>Este mes</option>
+            <option value="anio">Este año</option>
+        </select>
+        <button class="w3-button w3-purple w3-margin-top" onclick="aplicarFiltro()">Aplicar</button>
+    </div>
+
+    <div class="w3-row-padding w3-margin-top">
+        <div class="w3-half">
+            <div class="w3-card-4 w3-padding">
+                <h3 class="w3-text-purple">Usuarios por Sexo</h3>
+                <canvas id="chartGenero"></canvas>
+                <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartGenero', 'usuarios_por_genero')">Imprimir</button>
+            </div>
+        </div>
+
+        <div class="w3-half">
+            <div class="w3-card-4 w3-padding">
+                <h3 class="w3-text-purple">Usuarios por Grupo Etario</h3>
+                <canvas id="chartEdad"></canvas>
+                <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartEdad', 'usuarios_por_edad')">Imprimir</button>
+            </div>
+        </div>
+    </div>
+    <!-- Usuarios por País -->
+    <div class="w3-half">
+        <div class="w3-card w3-padding">
+            <h3 class="w3-text-purple">Usuarios por País</h3>
+            <canvas id="chartPais"></canvas>
+            <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPais', 'usuarios_por_pais')">Imprimir</button>
+        </div>
+    </div>
+
+    <!-- Top 10 Aciertos -->
+    <div class="w3-half">
+        <div class="w3-card w3-padding">
+            <h3 class="w3-text-purple">Top 10 - % Aciertos por Usuario</h3>
+            <canvas id="chartAciertos"></canvas>
+            <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartAciertos', 'porcentaje_aciertos')">Imprimir</button>
+        </div>
+    </div>
+
+    <div class="w3-card-4 w3-padding w3-margin-top">
+        <h3 class="w3-text-purple">Preguntas Respondidas vs Aciertos</h3>
+        <canvas id="chartPreguntas"></canvas>
+        <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPreguntas', 'preguntas_respuestas')">Imprimir</button>
+    </div>
+
+    <script>
+    function generatePdf(type) {
+        fetch(`/admin/generatePdf`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ type: type })
+        })
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `reporte_${type}.pdf`;
+                    a.click();
+                })
+                .catch(err => alert("No se pudo generar el PDF."));
+    }
+</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            generarGraficos();
+        });
+
+        function generarGraficos() {
+            const generoData = {
+                labels: ['Masculino', 'Femenino', 'No Binario'],
+                data: [{{totalDeHombres}}, {{totalDeMujeres}}, {{totalDeElles}}]
+            };
+
+            const edadData = {
+                labels: ['Menores', 'Adultos', 'Jubilados'],
+                data: [{{cantidad_menores}}, {{cantidad_adultos}}, {{cantidad_jubilados}}]
+            };
+
+            const preguntasData = {
+                labels: ['Respondidas', 'Aciertos'],
+                data: [{{total_preguntas_respondidas}}, {{total_respuestas_correctas}}]
+            };
+
+            const paisLabels = [{{#usuarios_por_pais}}"{{pais}}",{{/usuarios_por_pais}}];
+            const paisData = [{{#usuarios_por_pais}}{{cantidad}},{{/usuarios_por_pais}}];
+            const paisDataObj = { labels: paisLabels, data: paisData };
+
+            const aciertoLabels = [{{#porcentaje_aciertos_usuarios}}"{{nombre_usuario}}",{{/porcentaje_aciertos_usuarios}}];
+            const aciertoData = [{{#porcentaje_aciertos_usuarios}}{{porcentaje}},{{/porcentaje_aciertos_usuarios}}];
+            const aciertoDataObj = { labels: aciertoLabels, data: aciertoData };
+
+            renderChart('chartGenero', 'Usuarios por Género', generoData);
+            renderChart('chartEdad', 'Usuarios por Edad', edadData);
+            renderChart('chartPreguntas', 'Preguntas Respondidas vs Aciertos', preguntasData);
+            renderChart('chartPais', 'Usuarios por País', paisDataObj);
+            renderChart('chartAciertos', '% Aciertos por Usuario', aciertoDataObj);
+        }
+
+
+        function renderChart(id, title, chartData) {
+            const ctx = document.getElementById(id).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [{
+                        label: title,
+                        data: chartData.data,
+                        backgroundColor: ['#6a1b9a', '#9c27b0', '#ba68c8', '#d1c4e9', '#7b1fa2'],
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: title
+                        }
+                    }
+                }
+            });
+        }
+
+
+        function imprimirGrafico(canvasId, nombre) {
+            const canvas = document.getElementById(canvasId);
+            const imageData = canvas.toDataURL("image/png", 1.0);
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            // Datos para cada tipo de gráfico (tomados del DOM o del template)
+            let datosTexto = {};
+
+            if (nombre === 'usuarios_por_genero') {
+                datosTexto = {
+                    'Masculino': parseInt('{{totalDeHombres}}'),
+                    'Femenino': parseInt('{{totalDeMujeres}}'),
+                    'No Binario': parseInt('{{totalDeElles}}')
+                };
+            } else if (nombre === 'usuarios_por_edad') {
+                datosTexto = {
+                    'Menores': parseInt('{{cantidad_menores}}'),
+                    'Adultos': parseInt('{{cantidad_adultos}}'),
+                    'Jubilados': parseInt('{{cantidad_jubilados}}')
+                };
+            } else if (nombre === 'preguntas_respuestas') {
+                datosTexto = {
+                    'Preguntas Respondidas': parseInt('{{total_preguntas_respondidas}}'),
+                    'Respuestas Correctas': parseInt('{{total_respuestas_correctas}}')
+                }
+            }else if (nombre === 'usuarios_por_pais') {
+                datosTexto = {
+                    {{#usuarios_por_pais}}
+                        '{{pais}}': parseInt({{cantidad}}),
+                    {{/usuarios_por_pais}}
+                };
+            } else if (nombre === 'porcentaje_aciertos') {
+                datosTexto = {
+                    {{#porcentaje_aciertos_usuarios}}
+                        '{{nombre_usuario}}': parseFloat({{porcentaje}}),
+                    {{/porcentaje_aciertos_usuarios}}
+                };
+            }
+
+            // Título
+            pdf.setFontSize(16);
+            pdf.text("Reporte Estadístico - " + nombre.replace(/_/g, " "), 15, 20);
+
+            // Texto con datos
+            pdf.setFontSize(12);
+            let y = 30;
+            for (const [clave, valor] of Object.entries(datosTexto)) {
+                pdf.text(`${clave}: ${valor}`, 15, y);
+                y += 7;
+            }
+
+            // Agregar el gráfico debajo del texto
+            pdf.addImage(imageData, 'PNG', 15, y + 5, 180, 100);
+
+            pdf.save(nombre + ".pdf");
+        }
+
+
+    </script>
+<!--    <script>-->
+<!--        function aplicarFiltro() {-->
+<!--            const filtro = document.getElementById("filtro-estadisticas").value;-->
+
+<!--            fetch("/index.php?controller=admin&method=filterStats", {-->
+<!--                method: "POST",-->
+<!--                headers: {-->
+<!--                    "Content-Type": "application/json"-->
+<!--                },-->
+<!--                body: JSON.stringify({ filtro: filtro }) // <- CORREGIDO-->
+<!--            })-->
+<!--                    .then(response => response.json())-->
+<!--                    .then(data => {-->
+<!--                        actualizarGraficos(data);-->
+<!--                    })-->
+<!--                    .catch(error => console.error("Error:", error));-->
+<!--        }-->
+
+<!--        function actualizarGraficos(data) {-->
+<!--            renderChart('chartGenero', 'Usuarios por Género', {-->
+<!--                labels: ['Masculino', 'Femenino', 'No Binario'],-->
+<!--                data: [data.totalDeHombres, data.totalDeMujeres, data.totalDeElles]-->
+<!--            });-->
+
+<!--            renderChart('chartEdad', 'Usuarios por Edad', {-->
+<!--                labels: ['Menores', 'Adultos', 'Jubilados'],-->
+<!--                data: [data.cantidad_menores, data.cantidad_adultos, data.cantidad_jubilados]-->
+<!--            });-->
+
+<!--            renderChart('chartPreguntas', 'Preguntas Respondidas vs Aciertos', {-->
+<!--                labels: ['Respondidas', 'Aciertos'],-->
+<!--                data: [data.total_preguntas_respondidas, data.total_respuestas_correctas]-->
+<!--            });-->
+<!--        }-->
+<!--    </script>-->
+
+</div> <!-- Cierre de w3-content -->
+
+</body>
+</html>

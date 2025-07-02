@@ -22,7 +22,7 @@ if (!isset($_SESSION['id_usuario'])) {
     // Defino qué controladores/metodos son accesibles para cada rol
     $accesos = [
         'administrador' => [
-            'admin' => ['viewAdmin', 'generatePdf', 'filterStats'],
+            'admin' => ['viewAdmin', 'generatePdf', 'filtroEstadisticas'],
             // otros controladores y métodos permitidos para admin
         ],
         'editor' => [

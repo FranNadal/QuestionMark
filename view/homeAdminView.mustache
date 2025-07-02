@@ -22,14 +22,17 @@
     <div class="w3-card-4 w3-padding w3-margin-bottom">
         <h2 class="w3-text-purple">Resumen de Estadísticas</h2>
         <ul class="w3-ul">
-            <li><b>Total de Jugadores:</b> {{total_users}}</li>
-            <li><b>Total de Partidas:</b> {{total_games}}</li>
-            <li><b>Total de Preguntas:</b> {{total_questions}}</li>
-            <li><b>Total de Preguntas Creadas:</b> {{total_questions_created}}</li>
-            <li><b>Usuarios Nuevos:</b> {{total_users_created}}</li>
-            <li><b>Promedio de Edad:</b> {{promedio_edad}}</li>
-            <li><b>Promedio de Aciertos:</b> {{ratio_aciertos}}%</li>
+            <li><b>Total de Jugadores:</b> <span id="resumen-total-users">{{total_users}}</span></li>
+            <li><b>Total de Partidas:</b> <span id="resumen-total-games">{{total_games}}</span></li>
+            <li><b>Total de Preguntas:</b> <span id="resumen-total-questions">{{total_questions}}</span></li>
+            <li><b>Total de Preguntas Creadas:</b> <span id="resumen-total-questions-created">{{total_questions_created}}</span></li>
+            <li><b>Usuarios Nuevos:</b> <span id="resumen-total-users-created">{{total_users_created}}</span></li>
+            <li><b>Promedio de Edad:</b> <span id="resumen-promedio-edad">{{promedio_edad}}</span></li>
+            <li><b>Promedio de Aciertos:</b> <span id="resumen-ratio-aciertos">{{ratio_aciertos}}%</span></li>
         </ul>
+        <button class="w3-button w3-purple w3-margin-top" onclick="imprimirResumen()">Imprimir Resumen</button>
+
+
     </div>
     <div class="w3-card w3-padding w3-margin-bottom">
         <label for="filtro-estadisticas">Filtrar por:</label>
@@ -40,6 +43,13 @@
             <option value="anio">Este año</option>
         </select>
         <button class="w3-button w3-purple w3-margin-top" onclick="aplicarFiltro()">Aplicar</button>
+    </div>
+    <div class="w3-half">
+        <div class="w3-card-4 w3-padding">
+            <h3 class="w3-text-purple">Partidas por Estado</h3>
+            <canvas id="chartPartidasEstado"></canvas>
+            <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPartidasEstado', 'partidas_por_estado')">Imprimir</button>
+        </div>
     </div>
 
     <div class="w3-row-padding w3-margin-top">
@@ -102,45 +112,49 @@
     }
 </script>
     <script>
+        // Variables globales para instancias y datos actuales
+        let chartGenero, chartEdad, chartPreguntas, chartPais, chartAciertos, chartPartidasEstado;
+        let estadoFiltroActual = "Este mes"; // valor inicial, coincide con select por defecto
+
+        // Guardamos los datos actuales de cada gráfico para imprimir PDF con los datos filtrados
+        let datosGeneroActuales = { labels: ['Masculino', 'Femenino', 'No Binario'], data: [] };
+        let datosEdadActuales = { labels: ['Menores', 'Adultos', 'Jubilados'], data: [] };
+        let datosPreguntasActuales = { labels: ['Respondidas', 'Aciertos'], data: [] };
+        let datosPaisActuales = { labels: [], data: [] };
+        let datosAciertosActuales = { labels: [], data: [] };
+        let datosPartidasEstadoActuales = { labels: [], data: [] };
+
         document.addEventListener("DOMContentLoaded", () => {
             generarGraficos();
         });
 
         function generarGraficos() {
-            const generoData = {
-                labels: ['Masculino', 'Femenino', 'No Binario'],
-                data: [{{totalDeHombres}}, {{totalDeMujeres}}, {{totalDeElles}}]
-            };
+            datosGeneroActuales.data = [{{totalDeHombres}}, {{totalDeMujeres}}, {{totalDeElles}}];
+            datosEdadActuales.data = [{{cantidad_menores}}, {{cantidad_adultos}}, {{cantidad_jubilados}}];
+            datosPreguntasActuales.data = [{{total_preguntas_respondidas}}, {{total_respuestas_correctas}}];
 
-            const edadData = {
-                labels: ['Menores', 'Adultos', 'Jubilados'],
-                data: [{{cantidad_menores}}, {{cantidad_adultos}}, {{cantidad_jubilados}}]
-            };
+            datosPaisActuales.labels = [{{#usuarios_por_pais}}"{{pais}}",{{/usuarios_por_pais}}];
+            datosPaisActuales.data = [{{#usuarios_por_pais}}{{cantidad}},{{/usuarios_por_pais}}];
 
-            const preguntasData = {
-                labels: ['Respondidas', 'Aciertos'],
-                data: [{{total_preguntas_respondidas}}, {{total_respuestas_correctas}}]
-            };
+            datosAciertosActuales.labels = [{{#porcentaje_aciertos_usuarios}}"{{nombre_usuario}}",{{/porcentaje_aciertos_usuarios}}];
+            datosAciertosActuales.data = [{{#porcentaje_aciertos_usuarios}}{{porcentaje}},{{/porcentaje_aciertos_usuarios}}];
 
-            const paisLabels = [{{#usuarios_por_pais}}"{{pais}}",{{/usuarios_por_pais}}];
-            const paisData = [{{#usuarios_por_pais}}{{cantidad}},{{/usuarios_por_pais}}];
-            const paisDataObj = { labels: paisLabels, data: paisData };
+            datosPartidasEstadoActuales.labels = [{{#partidas_por_estado}}"{{estado}}",{{/partidas_por_estado}}];
+            datosPartidasEstadoActuales.data = [{{#partidas_por_estado}}{{cantidad}},{{/partidas_por_estado}}];
 
-            const aciertoLabels = [{{#porcentaje_aciertos_usuarios}}"{{nombre_usuario}}",{{/porcentaje_aciertos_usuarios}}];
-            const aciertoData = [{{#porcentaje_aciertos_usuarios}}{{porcentaje}},{{/porcentaje_aciertos_usuarios}}];
-            const aciertoDataObj = { labels: aciertoLabels, data: aciertoData };
-
-            renderChart('chartGenero', 'Usuarios por Género', generoData);
-            renderChart('chartEdad', 'Usuarios por Edad', edadData);
-            renderChart('chartPreguntas', 'Preguntas Respondidas vs Aciertos', preguntasData);
-            renderChart('chartPais', 'Usuarios por País', paisDataObj);
-            renderChart('chartAciertos', '% Aciertos por Usuario', aciertoDataObj);
+            chartGenero = renderChart('chartGenero', 'Usuarios por Género', datosGeneroActuales, chartGenero);
+            chartEdad = renderChart('chartEdad', 'Usuarios por Edad', datosEdadActuales, chartEdad);
+            chartPreguntas = renderChart('chartPreguntas', 'Preguntas Respondidas vs Aciertos', datosPreguntasActuales, chartPreguntas);
+            chartPais = renderChart('chartPais', 'Usuarios por País', datosPaisActuales, chartPais);
+            chartAciertos = renderChart('chartAciertos', '% Aciertos por Usuario', datosAciertosActuales, chartAciertos);
+            chartPartidasEstado = renderChart('chartPartidasEstado', 'Partidas por Estado', datosPartidasEstadoActuales, chartPartidasEstado);
         }
 
+        function renderChart(id, title, chartData, existingChart) {
+            if (existingChart) existingChart.destroy();
 
-        function renderChart(id, title, chartData) {
             const ctx = document.getElementById(id).getContext('2d');
-            new Chart(ctx, {
+            return new Chart(ctx, {
                 type: 'pie',
                 data: {
                     labels: chartData.labels,
@@ -155,18 +169,80 @@
                 options: {
                     responsive: true,
                     plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        title: {
-                            display: true,
-                            text: title
-                        }
+                        legend: { position: 'bottom' },
+                        title: { display: true, text: title }
                     }
                 }
             });
         }
 
+        function aplicarFiltro() {
+            const filtro = document.getElementById("filtro-estadisticas").value;
+            // Guardar filtro actual para usar en PDF
+            estadoFiltroActual = document.getElementById("filtro-estadisticas").options[document.getElementById("filtro-estadisticas").selectedIndex].text;
+
+            fetch('/index.php?controller=admin&method=filtroEstadisticas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filtro })
+            })
+                    .then(res => res.json())
+                    .then(datos => {
+                        actualizarGraficosConFiltro(datos);
+                    })
+                    .catch(() => alert("Error al aplicar el filtro."));
+        }
+
+        function safeNumber(value) {
+            return (value === null || isNaN(value)) ? 0 : Number(value);
+        }
+
+        function actualizarGraficosConFiltro(data) {
+            datosGeneroActuales.data = [
+                safeNumber(data.totalDeHombres),
+                safeNumber(data.totalDeMujeres),
+                safeNumber(data.totalDeElles)
+            ];
+            datosEdadActuales.data = [
+                safeNumber(data.cantidad_menores),
+                safeNumber(data.cantidad_adultos),
+                safeNumber(data.cantidad_jubilados)
+            ];
+
+            datosPaisActuales.labels = data.usuarios_por_pais && data.usuarios_por_pais.length > 0
+                    ? data.usuarios_por_pais.map(p => p.pais)
+                    : ['Sin datos'];
+            datosPaisActuales.data = data.usuarios_por_pais && data.usuarios_por_pais.length > 0
+                    ? data.usuarios_por_pais.map(p => p.cantidad)
+                    : [0];
+
+            datosPartidasEstadoActuales.labels = data.partidas_por_estado && data.partidas_por_estado.length > 0
+                    ? data.partidas_por_estado.map(p => p.estado)
+                    : ['Sin datos'];
+            datosPartidasEstadoActuales.data = data.partidas_por_estado && data.partidas_por_estado.length > 0
+                    ? data.partidas_por_estado.map(p => p.cantidad)
+                    : [0];
+
+            chartGenero = renderChart('chartGenero', 'Usuarios por Género', datosGeneroActuales, chartGenero);
+            chartEdad = renderChart('chartEdad', 'Usuarios por Edad', datosEdadActuales, chartEdad);
+            chartPais = renderChart('chartPais', 'Usuarios por País', datosPaisActuales, chartPais);
+            chartPartidasEstado = renderChart('chartPartidasEstado', 'Partidas por Estado', datosPartidasEstadoActuales, chartPartidasEstado);
+            // Actualizar resumen estadístico
+            document.getElementById('resumen-total-users').innerText = data.total_users ?? 0;
+            document.getElementById('resumen-total-games').innerText = data.total_games ?? 0;
+            document.getElementById('resumen-total-questions').innerText = data.total_questions ?? 0;
+            document.getElementById('resumen-total-questions-created').innerText = data.total_questions_created ?? 0;
+            document.getElementById('resumen-total-users-created').innerText = data.total_users_created ?? 0;
+            document.getElementById('resumen-promedio-edad').innerText = data.promedio_edad ?? 0;
+            document.getElementById('resumen-ratio-aciertos').innerText = (data.ratio_aciertos ?? 0) + "%";
+
+// También actualizás preguntasData para imprimir luego
+            datosPreguntasActuales.data = [
+                safeNumber(data.total_preguntas_respondidas),
+                safeNumber(data.total_respuestas_correctas)
+            ];
+
+        }
 
         function imprimirGrafico(canvasId, nombre) {
             const canvas = document.getElementById(canvasId);
@@ -174,95 +250,87 @@
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
 
-            // Datos para cada tipo de gráfico (tomados del DOM o del template)
+            // Elegimos qué datos mostrar según el gráfico usando las variables actuales
             let datosTexto = {};
-
             if (nombre === 'usuarios_por_genero') {
                 datosTexto = {
-                    'Masculino': parseInt('{{totalDeHombres}}'),
-                    'Femenino': parseInt('{{totalDeMujeres}}'),
-                    'No Binario': parseInt('{{totalDeElles}}')
+                    'Masculino': datosGeneroActuales.data[0],
+                    'Femenino': datosGeneroActuales.data[1],
+                    'No Binario': datosGeneroActuales.data[2]
                 };
             } else if (nombre === 'usuarios_por_edad') {
                 datosTexto = {
-                    'Menores': parseInt('{{cantidad_menores}}'),
-                    'Adultos': parseInt('{{cantidad_adultos}}'),
-                    'Jubilados': parseInt('{{cantidad_jubilados}}')
+                    'Menores': datosEdadActuales.data[0],
+                    'Adultos': datosEdadActuales.data[1],
+                    'Jubilados': datosEdadActuales.data[2]
                 };
             } else if (nombre === 'preguntas_respuestas') {
                 datosTexto = {
-                    'Preguntas Respondidas': parseInt('{{total_preguntas_respondidas}}'),
-                    'Respuestas Correctas': parseInt('{{total_respuestas_correctas}}')
+                    'Preguntas Respondidas': safeNumber({{total_preguntas_respondidas}}),  // Si quieres hacerlo dinámico, tendrías que guardar en variable global similar
+                    'Respuestas Correctas': safeNumber({{total_respuestas_correctas}})
                 }
-            }else if (nombre === 'usuarios_por_pais') {
-                datosTexto = {
-                    {{#usuarios_por_pais}}
-                        '{{pais}}': parseInt({{cantidad}}),
-                    {{/usuarios_por_pais}}
-                };
+            } else if (nombre === 'usuarios_por_pais') {
+                datosTexto = {};
+                datosPaisActuales.labels.forEach((pais, i) => {
+                    datosTexto[pais] = datosPaisActuales.data[i];
+                });
             } else if (nombre === 'porcentaje_aciertos') {
-                datosTexto = {
-                    {{#porcentaje_aciertos_usuarios}}
-                        '{{nombre_usuario}}': parseFloat({{porcentaje}}),
-                    {{/porcentaje_aciertos_usuarios}}
-                };
+                datosTexto = {};
+                datosAciertosActuales.labels.forEach((usuario, i) => {
+                    datosTexto[usuario] = datosAciertosActuales.data[i];
+                });
+            } else if (nombre === 'partidas_por_estado') {
+                datosTexto = {};
+                datosPartidasEstadoActuales.labels.forEach((estado, i) => {
+                    datosTexto[estado] = datosPartidasEstadoActuales.data[i];
+                });
             }
 
-            // Título
             pdf.setFontSize(16);
             pdf.text("Reporte Estadístico - " + nombre.replace(/_/g, " "), 15, 20);
-
-            // Texto con datos
             pdf.setFontSize(12);
-            let y = 30;
+            pdf.text("Filtro aplicado: " + estadoFiltroActual, 15, 28);
+
+            let y = 38;
             for (const [clave, valor] of Object.entries(datosTexto)) {
                 pdf.text(`${clave}: ${valor}`, 15, y);
                 y += 7;
             }
 
-            // Agregar el gráfico debajo del texto
             pdf.addImage(imageData, 'PNG', 15, y + 5, 180, 100);
 
             pdf.save(nombre + ".pdf");
         }
+        function imprimirResumen() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
 
+            pdf.setFontSize(16);
+            pdf.text("Resumen de Estadísticas", 15, 20);
+            pdf.setFontSize(12);
+            pdf.text("Filtro aplicado: " + estadoFiltroActual, 15, 28);
+
+            const datos = {
+                "Total de Jugadores": document.getElementById('resumen-total-users').innerText,
+                "Total de Partidas": document.getElementById('resumen-total-games').innerText,
+                "Total de Preguntas": document.getElementById('resumen-total-questions').innerText,
+                "Total de Preguntas Creadas": document.getElementById('resumen-total-questions-created').innerText,
+                "Usuarios Nuevos": document.getElementById('resumen-total-users-created').innerText,
+                "Promedio de Edad": document.getElementById('resumen-promedio-edad').innerText,
+                "Promedio de Aciertos": document.getElementById('resumen-ratio-aciertos').innerText
+            };
+
+            let y = 38;
+            for (const [titulo, valor] of Object.entries(datos)) {
+                pdf.text(`${titulo}: ${valor}`, 15, y);
+                y += 7;
+            }
+
+            pdf.save("resumen_estadisticas.pdf");
+        }
 
     </script>
-<!--    <script>-->
-<!--        function aplicarFiltro() {-->
-<!--            const filtro = document.getElementById("filtro-estadisticas").value;-->
 
-<!--            fetch("/index.php?controller=admin&method=filterStats", {-->
-<!--                method: "POST",-->
-<!--                headers: {-->
-<!--                    "Content-Type": "application/json"-->
-<!--                },-->
-<!--                body: JSON.stringify({ filtro: filtro }) // <- CORREGIDO-->
-<!--            })-->
-<!--                    .then(response => response.json())-->
-<!--                    .then(data => {-->
-<!--                        actualizarGraficos(data);-->
-<!--                    })-->
-<!--                    .catch(error => console.error("Error:", error));-->
-<!--        }-->
-
-<!--        function actualizarGraficos(data) {-->
-<!--            renderChart('chartGenero', 'Usuarios por Género', {-->
-<!--                labels: ['Masculino', 'Femenino', 'No Binario'],-->
-<!--                data: [data.totalDeHombres, data.totalDeMujeres, data.totalDeElles]-->
-<!--            });-->
-
-<!--            renderChart('chartEdad', 'Usuarios por Edad', {-->
-<!--                labels: ['Menores', 'Adultos', 'Jubilados'],-->
-<!--                data: [data.cantidad_menores, data.cantidad_adultos, data.cantidad_jubilados]-->
-<!--            });-->
-
-<!--            renderChart('chartPreguntas', 'Preguntas Respondidas vs Aciertos', {-->
-<!--                labels: ['Respondidas', 'Aciertos'],-->
-<!--                data: [data.total_preguntas_respondidas, data.total_respuestas_correctas]-->
-<!--            });-->
-<!--        }-->
-<!--    </script>-->
 
 </div> <!-- Cierre de w3-content -->
 

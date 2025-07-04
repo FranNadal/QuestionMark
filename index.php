@@ -9,12 +9,18 @@ $method = isset($_GET["method"]) ? $_GET["method"] : null;
 
 // Control de acceso básico
 if (!isset($_SESSION['id_usuario'])) {
-    // No logueado, solo permite register y login
-    if (!(($controller == "register" && $method == "register") ||
-        ($controller == "login" && in_array($method, ['login', 'doLogin'])))) {
+    // Métodos públicos accesibles sin logueo
+    $publicos = [
+        'register' => ['register', 'doRegister', 'validate'],
+        'login' => ['login', 'doLogin']
+    ];
+
+    // Validamos si el método solicitado está permitido públicamente
+    if (!isset($publicos[$controller]) || !in_array($method, $publicos[$controller])) {
         $controller = "login";
         $method = "login";  // redirigir a login
     }
+
 } else {
     // Usuario logueado, validamos rol
     $rol = $_SESSION['rol'];
@@ -23,11 +29,9 @@ if (!isset($_SESSION['id_usuario'])) {
     $accesos = [
         'administrador' => [
             'admin' => ['viewAdmin', 'generatePdf', 'filtroEstadisticas'],
-            // otros controladores y métodos permitidos para admin
         ],
         'editor' => [
-            'editor' => ['viewEditor', 'aprobarPregunta' , 'altaPregunta', 'bajaPregunta', 'modificarPregunta', 'aprobarSugerida','desaprobarSugerida','rechazarReportada','aprobarReportada','editar'],
-            // otros controladores y métodos que puede usar editor
+            'editor' => ['viewEditor', 'aprobarPregunta', 'altaPregunta', 'bajaPregunta', 'modificarPregunta', 'aprobarSugerida','desaprobarSugerida','rechazarReportada','aprobarReportada','editar'],
         ],
         'usuario' => [
             'home' => ['view','show'],
@@ -41,8 +45,6 @@ if (!isset($_SESSION['id_usuario'])) {
         ],
     ];
 
-
-    // Si el controlador no está definido para el rol, o el método no está permitido, lo bloqueamos
     if ($controller !== null && $method !== null) {
         $puedeAcceder = false;
 
@@ -55,7 +57,6 @@ if (!isset($_SESSION['id_usuario'])) {
         }
 
         if (!$puedeAcceder) {
-            // Redirigir según rol
             switch ($rol) {
                 case 'administrador':
                     $controller = "admin";
@@ -75,11 +76,9 @@ if (!isset($_SESSION['id_usuario'])) {
             }
         }
     }
-
 }
 
 $router->go(
     $controller,
     $method
 );
-

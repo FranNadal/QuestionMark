@@ -108,9 +108,29 @@
 
         if (timeLeft < 0) {
             clearInterval(countdown);
-            puntajeFinalEl.textContent = puntajeActualEl.textContent;
-            document.getElementById('modalFin').style.display = 'block';
-        } else {
+
+            // Simular respuesta vacía para que se tome como incorrecta
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/jugar/responder';
+
+            const inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = 'id_pregunta';
+            inputId.value = '{{pregunta.id_pregunta}}'; // ID actual
+
+            const inputRespuesta = document.createElement('input');
+            inputRespuesta.type = 'hidden';
+            inputRespuesta.name = 'respuesta';
+            inputRespuesta.value = 'X'; // Valor incorrecto forzado
+
+            form.appendChild(inputId);
+            form.appendChild(inputRespuesta);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+ else {
             actualizarContadorYBarra();
         }
     }, 1000);

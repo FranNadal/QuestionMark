@@ -87,15 +87,6 @@ class JugarController
 
     public function responder()
     {
-
-        if (isset($_SESSION['tiempo_inicio_pregunta'])) {
-            $tiempo = time() - $_SESSION['tiempo_inicio_pregunta'];
-            if ($tiempo > $this->tiempoLimite) {
-                $this->terminarPartidaPorTiempo();
-                return;
-            }
-        }
-
         $id_usuario  = $_SESSION['id_usuario'];
         $id_pregunta = $_POST['id_pregunta'] ?? null;
         $respuesta   = $_POST['respuesta']   ?? null;
@@ -105,81 +96,94 @@ class JugarController
             exit;
         }
 
+        // Obtener la pregunta para poder usarla luego (en caso de tiempo agotado o respuesta incorrecta)
         $pregunta = $this->model->getPreguntaById($id_pregunta);
+
         if (!$pregunta) {
             $this->terminarPartida();
             return;
         }
 
-        $acierto = strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta);
+        // Verificar si se pasó el tiempo límite
+        if (isset($_SESSION['tiempo_inicio_pregunta'])) {
+            $tiempo = time() - $_SESSION['tiempo_inicio_pregunta'];
+            if ($tiempo > $this->tiempoLimite) {
+                // Se acabó el tiempo, construir datos para finalizar la partida
+                $arrayInfoFinal = [
+                    'pregunta'          => $pregunta,
+                    'puntaje_actual'    => $_SESSION['puntaje'] ?? 0,
+                    'color_categoria'   => $this->model->getColorCategoria($_SESSION['categoria_seleccionada'] ?? 'Cultura'),
+                    'es_correcta'       => false,
+                    'respuesta_correcta'        => strtoupper($pregunta['respuesta_correcta']),
+                    'texto_respuesta_correcta'  => $this->getTextoRespuestaCorrecta($pregunta),
+                    'opciones' => $this->getOpcionesConEstilo($pregunta)
+                ];
 
-        $respuesta_correcta = strtoupper($pregunta['respuesta_correcta']);
-        $texto_respuesta_correcta = '';
-
-        switch ($respuesta_correcta) {
-            case 'A':
-                $texto_respuesta_correcta = $pregunta['opcion_a'];
-                break;
-            case 'B':
-                $texto_respuesta_correcta = $pregunta['opcion_b'];
-                break;
-            case 'C':
-                $texto_respuesta_correcta = $pregunta['opcion_c'];
-                break;
-            case 'D':
-                $texto_respuesta_correcta = $pregunta['opcion_d'];
-                break;
+                $this->terminarPartidaPorTiempo($arrayInfoFinal);
+                return;
+            }
         }
 
+        // Evaluar respuesta
+        $acierto = strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta);
+
+        // Preparar texto de respuesta correcta para mostrar
+        $respuesta_correcta = strtoupper($pregunta['respuesta_correcta']);
+        $texto_respuesta_correcta = $this->getTextoRespuestaCorrecta($pregunta);
+
+        // Actualizar estadísticas
         $this->model->actualizarEstadisticasUsuario($id_usuario, $acierto);
         $this->model->actualizarEstadisticasPregunta($id_pregunta, $acierto);
 
         if (!isset($_SESSION['puntaje'])) {
             $_SESSION['puntaje'] = 0;
         }
-        $opciones = [
-            [
-                'letra'  => 'A',
-                'texto'  => $pregunta['opcion_a'],
-                'clase'  => ($respuesta_correcta === 'A') ? 'opcion-correcta' : 'opcion-incorrecta'
-            ],
-            [
-                'letra'  => 'B',
-                'texto'  => $pregunta['opcion_b'],
-                'clase'  => ($respuesta_correcta === 'B') ? 'opcion-correcta' : 'opcion-incorrecta'
-            ],
-            [
-                'letra'  => 'C',
-                'texto'  => $pregunta['opcion_c'],
-                'clase'  => ($respuesta_correcta === 'C') ? 'opcion-correcta' : 'opcion-incorrecta'
-            ],
-            [
-                'letra'  => 'D',
-                'texto'  => $pregunta['opcion_d'],
-                'clase'  => ($respuesta_correcta === 'D') ? 'opcion-correcta' : 'opcion-incorrecta'
-            ],
-        ];
+
+        // Preparar opciones para la vista con estilos de correcto/incorrecto
+        $opciones = $this->getOpcionesConEstilo($pregunta);
+
         $arrayInfoFinal = [
             'pregunta'          => $pregunta,
             'puntaje_actual'    => $_SESSION['puntaje'],
             'color_categoria'   => $this->model->getColorCategoria($_SESSION['categoria_seleccionada']),
             'es_correcta'       => $acierto,
-            'respuesta_correcta'        => $respuesta_correcta,
-            'texto_respuesta_correcta'  => $texto_respuesta_correcta,
-            'opciones' => $opciones
+            'respuesta_correcta'=> $respuesta_correcta,
+            'texto_respuesta_correcta' => $texto_respuesta_correcta,
+            'opciones'          => $opciones
         ];
+
         if ($acierto) {
             $_SESSION['puntaje']++;
-            $_SESSION['tiempo_inicio_pregunta'] = time();  // reinicia tiempo para la próxima
+            $_SESSION['tiempo_inicio_pregunta'] = time();  // reiniciar tiempo para próxima pregunta
 
             $this->view->render('jugarResultado', $arrayInfoFinal);
-
-        }
-
-        if (!$acierto) {
+        } else {
             $this->terminarPartida($arrayInfoFinal);
         }
     }
+
+// Métodos auxiliares para texto y opciones (agregalos al controlador)
+
+    private function getTextoRespuestaCorrecta($pregunta) {
+        switch (strtoupper($pregunta['respuesta_correcta'])) {
+            case 'A': return $pregunta['opcion_a'];
+            case 'B': return $pregunta['opcion_b'];
+            case 'C': return $pregunta['opcion_c'];
+            case 'D': return $pregunta['opcion_d'];
+            default: return '';
+        }
+    }
+
+    private function getOpcionesConEstilo($pregunta) {
+        $correcta = strtoupper($pregunta['respuesta_correcta']);
+        return [
+            ['letra' => 'A', 'texto' => $pregunta['opcion_a'], 'clase' => $correcta === 'A' ? 'opcion-correcta' : 'opcion-incorrecta'],
+            ['letra' => 'B', 'texto' => $pregunta['opcion_b'], 'clase' => $correcta === 'B' ? 'opcion-correcta' : 'opcion-incorrecta'],
+            ['letra' => 'C', 'texto' => $pregunta['opcion_c'], 'clase' => $correcta === 'C' ? 'opcion-correcta' : 'opcion-incorrecta'],
+            ['letra' => 'D', 'texto' => $pregunta['opcion_d'], 'clase' => $correcta === 'D' ? 'opcion-correcta' : 'opcion-incorrecta'],
+        ];
+    }
+
 
 
     private function terminarPartidaConMensaje($mensaje, $arrayInfoFinal) {

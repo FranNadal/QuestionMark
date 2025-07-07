@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Perfil de Usuario</title>
+    <title>Pregunta</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
@@ -67,13 +67,6 @@
                 D) {{pregunta.opcion_d}}
             </button>
         </form>
-
-        <form action="/jugar/reporte" method="POST" class="w3-container w3-margin-top">
-            <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
-            <label for="motivo" class="w3-margin-top">¿Reportar pregunta inválida?</label>
-            <textarea class="w3-input w3-border w3-round-large w3-margin-top" name="motivo" id="motivo" placeholder="Escribe aquí el motivo..." required></textarea>
-            <button class="w3-button w3-red w3-round-large w3-margin-top" type="submit">Enviar reporte</button>
-        </form>
     </div>
 </div>
 
@@ -91,8 +84,8 @@
 
 <!-- SCRIPT DEL TEMPORIZADOR -->
 <script>
-    let timeLeft = 59; // 60 segundos (de 59 a 0)
-    const totalTime = 59;
+    let timeLeft = 10; // 60 segundos (de 59 a 0)
+    const totalTime = 10;
 
     const timerEl = document.getElementById('timer');
     const barraTiempo = document.getElementById('barra-tiempo');

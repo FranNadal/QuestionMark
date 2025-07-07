@@ -62,6 +62,13 @@
     <div class="w3-row-padding w3-margin-top">
         <div class="w3-third">
             <div class="w3-card-4 w3-padding">
+                <h3 class="w3-text-purple">Partidas por Estado</h3>
+                <canvas id="chartPartidasEstado"></canvas>
+                <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPartidasEstado', 'partidas_por_estado')">Imprimir</button>
+            </div>
+        </div>
+        <div class="w3-third">
+            <div class="w3-card-4 w3-padding">
                 <h3 class="w3-text-purple">Usuarios por Sexo</h3>
                 <canvas id="chartGenero"></canvas>
                 <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartGenero', 'usuarios_por_genero')">Imprimir</button>
@@ -74,15 +81,25 @@
                 <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartEdad', 'usuarios_por_edad')">Imprimir</button>
             </div>
         </div>
-        <div class="w3-third">
+    </div>
+
+    <!-- Gráficos: Segunda fila -->
+    <div class="w3-row-padding w3-margin-top">
+        <div class="w3-half">
             <div class="w3-card-4 w3-padding">
                 <h3 class="w3-text-purple">Usuarios por País</h3>
                 <canvas id="chartPais"></canvas>
                 <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPais', 'usuarios_por_pais')">Imprimir</button>
             </div>
         </div>
+        <div class="w3-half">
+            <div class="w3-card-4 w3-padding">
+                <h3 class="w3-text-purple">Top 10 - % Aciertos por Usuario</h3>
+                <canvas id="chartAciertos"></canvas>
+                <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartAciertos', 'porcentaje_aciertos')">Imprimir</button>
+            </div>
+        </div>
     </div>
-
 
     <!-- Preguntas Respondidas vs Aciertos -->
     <div class="w3-row-padding w3-margin-top">

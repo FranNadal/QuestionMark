@@ -7,110 +7,112 @@
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/view/styles/headerStyles.css">
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
 </head>
 <body>
-
 {{> headerAdmin}}
 
-
 <div class="w3-content" style="max-width:1200px; margin-top:30px;">
-    <div class="w3-card-4 w3-padding w3-margin-bottom">
-        <h2 class="w3-text-purple">Resumen de Estadísticas</h2>
-        <ul class="w3-ul">
-            <li><b>Total de Jugadores:</b> <span id="resumen-total-users">{{total_users}}</span></li>
-            <li><b>Total de Partidas:</b> <span id="resumen-total-games">{{total_games}}</span></li>
-            <li><b>Total de Preguntas:</b> <span id="resumen-total-questions">{{total_questions}}</span></li>
-            <li><b>Total de Preguntas Creadas:</b> <span id="resumen-total-questions-created">{{total_questions_created}}</span></li>
-            <li><b>Usuarios Nuevos:</b> <span id="resumen-total-users-created">{{total_users_created}}</span></li>
-            <li><b>Promedio de Edad:</b> <span id="resumen-promedio-edad">{{promedio_edad}}</span></li>
-            <li><b>Promedio de Aciertos:</b> <span id="resumen-ratio-aciertos">{{ratio_aciertos}}%</span></li>
-        </ul>
-        <button class="w3-button w3-purple w3-margin-top" onclick="imprimirResumen()">Imprimir Resumen</button>
 
-
-    </div>
-    <div class="w3-card w3-padding w3-margin-bottom">
-        <label for="filtro-estadisticas">Filtrar por:</label>
-        <select id="filtro-estadisticas" class="w3-select w3-border" style="max-width: 250px;">
-            <option value="dia">Hoy</option>
-            <option value="semana">Esta semana</option>
-            <option value="mes" selected>Este mes</option>
-            <option value="anio">Este año</option>
-        </select>
-        <button class="w3-button w3-purple w3-margin-top" onclick="aplicarFiltro()">Aplicar</button>
-    </div>
-    <div class="w3-half">
-        <div class="w3-card-4 w3-padding">
-            <h3 class="w3-text-purple">Partidas por Estado</h3>
-            <canvas id="chartPartidasEstado"></canvas>
-            <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPartidasEstado', 'partidas_por_estado')">Imprimir</button>
+    <!-- Resumen y Filtro -->
+    <div class="w3-row-padding w3-margin-bottom">
+        <div class="w3-third">
+            <div class="w3-card-4 w3-padding">
+                <h2 class="w3-text-purple">Resumen de Estadísticas</h2>
+                <ul class="w3-ul">
+                    <li><b>Total de Jugadores:</b> <span id="resumen-total-users">{{total_users}}</span></li>
+                    <li><b>Total de Partidas:</b> <span id="resumen-total-games">{{total_games}}</span></li>
+                    <li><b>Total de Preguntas:</b> <span id="resumen-total-questions">{{total_questions}}</span></li>
+                    <li><b>Total de Preguntas Creadas:</b> <span id="resumen-total-questions-created">{{total_questions_created}}</span></li>
+                    <li><b>Usuarios Nuevos:</b> <span id="resumen-total-users-created">{{total_users_created}}</span></li>
+                    <li><b>Promedio de Edad:</b> <span id="resumen-promedio-edad">{{promedio_edad}}</span></li>
+                    <li><b>Promedio de Aciertos:</b> <span id="resumen-ratio-aciertos">{{ratio_aciertos}}%</span></li>
+                </ul>
+                <button class="w3-button w3-purple w3-margin-top" onclick="imprimirResumen()">Imprimir Resumen</button>
+            </div>
+        </div>
+        <div class="w3-twothird">
+            <div class="w3-card-4 w3-padding w3-margin-bottom">
+                <label for="filtro-estadisticas"><b>Filtrar por:</b></label>
+                <div class="w3-row-padding">
+                    <div class="w3-half">
+                        <select id="filtro-estadisticas" class="w3-select w3-border" style="max-width: 250px;">
+                            <option value="dia">Hoy</option>
+                            <option value="semana">Esta semana</option>
+                            <option value="mes" selected>Este mes</option>
+                            <option value="anio">Este año</option>
+                        </select>
+                    </div>
+                    <div class="w3-half">
+                        <button class="w3-button w3-purple" style="width:100%;" onclick="aplicarFiltro()">Aplicar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="w3-center w3-margin-top">
+                <button class="w3-button w3-purple" onclick="imprimirTodoEnUnPDF()">
+                    <i class="fa fa-download"></i> Descargar Todo en PDF
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- Gráficos: Primera fila -->
     <div class="w3-row-padding w3-margin-top">
-        <div class="w3-half">
+        <div class="w3-third">
             <div class="w3-card-4 w3-padding">
                 <h3 class="w3-text-purple">Usuarios por Sexo</h3>
                 <canvas id="chartGenero"></canvas>
                 <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartGenero', 'usuarios_por_genero')">Imprimir</button>
             </div>
         </div>
-
-        <div class="w3-half">
+        <div class="w3-third">
             <div class="w3-card-4 w3-padding">
                 <h3 class="w3-text-purple">Usuarios por Grupo Etario</h3>
                 <canvas id="chartEdad"></canvas>
                 <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartEdad', 'usuarios_por_edad')">Imprimir</button>
             </div>
         </div>
-    </div>
-    <!-- Usuarios por País -->
-    <div class="w3-half">
-        <div class="w3-card w3-padding">
-            <h3 class="w3-text-purple">Usuarios por País</h3>
-            <canvas id="chartPais"></canvas>
-            <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPais', 'usuarios_por_pais')">Imprimir</button>
+        <div class="w3-third">
+            <div class="w3-card-4 w3-padding">
+                <h3 class="w3-text-purple">Usuarios por País</h3>
+                <canvas id="chartPais"></canvas>
+                <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPais', 'usuarios_por_pais')">Imprimir</button>
+            </div>
         </div>
     </div>
 
-    <!-- Top 10 Aciertos -->
-    <div class="w3-half">
-        <div class="w3-card w3-padding">
-            <h3 class="w3-text-purple">Top 10 - % Aciertos por Usuario</h3>
-            <canvas id="chartAciertos"></canvas>
-            <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartAciertos', 'porcentaje_aciertos')">Imprimir</button>
-        </div>
-    </div>
 
-    <div class="w3-card-4 w3-padding w3-margin-top">
-        <h3 class="w3-text-purple">Preguntas Respondidas vs Aciertos</h3>
-        <canvas id="chartPreguntas"></canvas>
-        <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPreguntas', 'preguntas_respuestas')">Imprimir</button>
+    <!-- Preguntas Respondidas vs Aciertos -->
+    <div class="w3-row-padding w3-margin-top">
+        <div class="w3-col s12">
+            <div class="w3-card-4 w3-padding">
+                <h3 class="w3-text-purple">Preguntas Respondidas vs Aciertos</h3>
+                <canvas id="chartPreguntas"></canvas>
+                <button class="w3-button w3-purple w3-margin-top" onclick="imprimirGrafico('chartPreguntas', 'preguntas_respuestas')">Imprimir</button>
+            </div>
+        </div>
     </div>
 
     <script>
-    function generatePdf(type) {
-        fetch(`/admin/generatePdf`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ type: type })
-        })
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = `reporte_${type}.pdf`;
-                    a.click();
-                })
-                .catch(err => alert("No se pudo generar el PDF."));
-    }
-</script>
+        function generatePdf(type) {
+            fetch(`/admin/generatePdf`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ type: type })
+            })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = `reporte_${type}.pdf`;
+                        a.click();
+                    })
+                    .catch(err => alert("No se pudo generar el PDF."));
+        }
+    </script>
     <script>
         // Variables globales para instancias y datos actuales
         let chartGenero, chartEdad, chartPreguntas, chartPais, chartAciertos, chartPartidasEstado;
@@ -329,6 +331,79 @@
             pdf.save("resumen_estadisticas.pdf");
         }
 
+
+        function imprimirTodoEnUnPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            pdf.setFontSize(16);
+            pdf.text("Reporte Completo de Estadísticas", 15, 20);
+            pdf.setFontSize(12);
+            pdf.text("Filtro aplicado: " + estadoFiltroActual, 15, 28);
+
+            let y = 38;
+
+            // Resumen
+            const resumen = {
+                "Total de Jugadores": document.getElementById('resumen-total-users').innerText,
+                "Total de Partidas": document.getElementById('resumen-total-games').innerText,
+                "Total de Preguntas": document.getElementById('resumen-total-questions').innerText,
+                "Total de Preguntas Creadas": document.getElementById('resumen-total-questions-created').innerText,
+                "Usuarios Nuevos": document.getElementById('resumen-total-users-created').innerText,
+                "Promedio de Edad": document.getElementById('resumen-promedio-edad').innerText,
+                "Promedio de Aciertos": document.getElementById('resumen-ratio-aciertos').innerText
+            };
+            for (const [titulo, valor] of Object.entries(resumen)) {
+                pdf.text(`${titulo}: ${valor}`, 15, y);
+                y += 7;
+            }
+            y += 10;
+
+            // Función auxiliar para agregar gráficos y datos
+            function agregarGraficoYDatos(pdf, canvasId, titulo, datosTexto) {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) return;
+                const imageData = canvas.toDataURL("image/png", 1.0);
+                pdf.setFontSize(14);
+                pdf.text(titulo, 15, y);
+                y += 7;
+                pdf.setFontSize(10);
+                for (const [clave, valor] of Object.entries(datosTexto)) {
+                    pdf.text(`${clave}: ${valor}`, 15, y);
+                    y += 5;
+                }
+                pdf.addImage(imageData, 'PNG', 15, y, 180, 80);
+                y += 90;
+                if (y > 250) { pdf.addPage(); y = 20; }
+            }
+
+            // Agrega cada gráfico y sus datos
+            agregarGraficoYDatos(pdf, 'chartGenero', 'Usuarios por Género', {
+                'Masculino': datosGeneroActuales.data[0],
+                'Femenino': datosGeneroActuales.data[1],
+                'No Binario': datosGeneroActuales.data[2]
+            });
+            agregarGraficoYDatos(pdf, 'chartEdad', 'Usuarios por Edad', {
+                'Menores': datosEdadActuales.data[0],
+                'Adultos': datosEdadActuales.data[1],
+                'Jubilados': datosEdadActuales.data[2]
+            });
+            agregarGraficoYDatos(pdf, 'chartPais', 'Usuarios por País',
+                    Object.fromEntries(datosPaisActuales.labels.map((l, i) => [l, datosPaisActuales.data[i]]))
+            );
+            agregarGraficoYDatos(pdf, 'chartAciertos', '% Aciertos por Usuario',
+                    Object.fromEntries(datosAciertosActuales.labels.map((l, i) => [l, datosAciertosActuales.data[i]]))
+            );
+            agregarGraficoYDatos(pdf, 'chartPartidasEstado', 'Partidas por Estado',
+                    Object.fromEntries(datosPartidasEstadoActuales.labels.map((l, i) => [l, datosPartidasEstadoActuales.data[i]]))
+            );
+            agregarGraficoYDatos(pdf, 'chartPreguntas', 'Preguntas Respondidas vs Aciertos', {
+                'Preguntas Respondidas': datosPreguntasActuales.data[0],
+                'Respuestas Correctas': datosPreguntasActuales.data[1]
+            });
+
+            pdf.save("reporte_completo_estadisticas.pdf");
+        }
     </script>
 
 

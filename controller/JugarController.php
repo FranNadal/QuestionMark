@@ -87,56 +87,14 @@ class JugarController
 
     public function responder()
     {
-
-        if (isset($_SESSION['tiempo_inicio_pregunta'])) {
-            $tiempo = time() - $_SESSION['tiempo_inicio_pregunta'];
-            if ($tiempo > $this->tiempoLimite) {
-                $this->terminarPartidaPorTiempo();
-                return;
-            }
-        }
-
         $id_usuario  = $_SESSION['id_usuario'];
         $id_pregunta = $_POST['id_pregunta'] ?? null;
         $respuesta   = $_POST['respuesta']   ?? null;
-
-        if (!$id_pregunta || !$respuesta) {
-            header('Location: /jugar/ruleta');
-            exit;
-        }
-
         $pregunta = $this->model->getPreguntaById($id_pregunta);
-        if (!$pregunta) {
-            $this->terminarPartida();
-            return;
-        }
-
-        $acierto = strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta);
-
         $respuesta_correcta = strtoupper($pregunta['respuesta_correcta']);
+        $acierto = strtoupper($pregunta['respuesta_correcta']) === strtoupper($respuesta);
         $texto_respuesta_correcta = '';
 
-        switch ($respuesta_correcta) {
-            case 'A':
-                $texto_respuesta_correcta = $pregunta['opcion_a'];
-                break;
-            case 'B':
-                $texto_respuesta_correcta = $pregunta['opcion_b'];
-                break;
-            case 'C':
-                $texto_respuesta_correcta = $pregunta['opcion_c'];
-                break;
-            case 'D':
-                $texto_respuesta_correcta = $pregunta['opcion_d'];
-                break;
-        }
-
-        $this->model->actualizarEstadisticasUsuario($id_usuario, $acierto);
-        $this->model->actualizarEstadisticasPregunta($id_pregunta, $acierto);
-
-        if (!isset($_SESSION['puntaje'])) {
-            $_SESSION['puntaje'] = 0;
-        }
         $opciones = [
             [
                 'letra'  => 'A',
@@ -168,6 +126,47 @@ class JugarController
             'texto_respuesta_correcta'  => $texto_respuesta_correcta,
             'opciones' => $opciones
         ];
+
+        if (isset($_SESSION['tiempo_inicio_pregunta'])) {
+            $tiempo = time() - $_SESSION['tiempo_inicio_pregunta'];
+            if ($tiempo > $this->tiempoLimite) {
+                $this->terminarPartidaPorTiempo($arrayInfoFinal);
+                return;
+            }
+        }
+
+        if (!$id_pregunta || !$respuesta) {
+            header('Location: /jugar/ruleta');
+            exit;
+        }
+
+        if (!$pregunta) {
+            $this->terminarPartida($arrayInfoFinal);
+            return;
+        }
+
+        switch ($respuesta_correcta) {
+            case 'A':
+                $texto_respuesta_correcta = $pregunta['opcion_a'];
+                break;
+            case 'B':
+                $texto_respuesta_correcta = $pregunta['opcion_b'];
+                break;
+            case 'C':
+                $texto_respuesta_correcta = $pregunta['opcion_c'];
+                break;
+            case 'D':
+                $texto_respuesta_correcta = $pregunta['opcion_d'];
+                break;
+        }
+
+        $this->model->actualizarEstadisticasUsuario($id_usuario, $acierto);
+        $this->model->actualizarEstadisticasPregunta($id_pregunta, $acierto);
+
+        if (!isset($_SESSION['puntaje'])) {
+            $_SESSION['puntaje'] = 0;
+        }
+
         if ($acierto) {
             $_SESSION['puntaje']++;
             $_SESSION['tiempo_inicio_pregunta'] = time();  // reinicia tiempo para la próxima
@@ -214,6 +213,7 @@ class JugarController
     }
 
     private function terminarPartidaPorTiempo($arrayInfoFinal) {
+        unset($arrayInfoFinal['es_correcta']);
         $this->terminarPartidaConMensaje('¡Se acabó el tiempo!', $arrayInfoFinal);
     }
 

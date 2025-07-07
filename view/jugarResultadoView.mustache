@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pregunta</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/view/styles/headerStyles.css">
+    <link rel="stylesheet" href="/view/styles/jugarResultadoView.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/view/img_page/icono_pagina.ico" />
+    <style>
+        body.modal-abierto {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+{{> header}}
+
+
+
+<div class="w3-container w3-card w3-round-large w3-padding">
+    <div class="contenedor-partida" style="background-color: {{color_categoria}};">
+        <div class="categoria"><h2>{{pregunta.categoria}}</h2></div>
+        <div class="info">
+            <p>
+                <img src="/view/img_page/marcas.png" class="info-icono">
+                <span id="puntaje-actual">{{puntaje_actual}}</span>
+            </p>
+        </div>
+        <img src="/view/img_page/{{pregunta.categoria}}.png" class="categoria-img">
+    </div>
+
+    <div class="w3-container w3-light-grey w3-round-large w3-padding">
+        <div class="contenedor-h3"><h3>{{pregunta.texto}}</h3></div>
+
+        <!-- Opciones con estado -->
+        <div class="form-respuestas">
+            {{#opciones}}
+                <button class="boton-respuesta {{clase}}" >
+                    {{letra}}) {{texto}}
+                </button>
+            {{/opciones}}
+        </div>
+        <div class="w3-container w3-center w3-margin-top">
+            {{#es_correcta}}
+                <p class="w3-text-green"><strong>¡Respuesta correcta!</strong></p>
+                <a href="/jugar/ruleta" class="w3-button w3-theme w3-round-large w3-margin-top">Siguiente pregunta</a>
+            {{/es_correcta}}
+            <form action="/jugar/reporte" method="POST" class="w3-container w3-margin-top" style="max-width: 600px; margin: auto;">
+                <input type="hidden" name="id_pregunta" value="{{pregunta.id_pregunta}}">
+                <label for="motivo" class="w3-margin-top">¿Reportar pregunta inválida?</label>
+                <textarea
+                        class="w3-input w3-border w3-round-large w3-margin-top"
+                        name="motivo"
+                        id="motivo"
+                        placeholder="Escribe aquí el motivo..."
+                        required>
+        </textarea>
+                <button class="w3-button w3-red w3-round-large w3-margin-top" type="submit">
+                    Enviar reporte
+                </button>
+            </form>
+        </div>
+{{#mostrar_modal_fin}}
+    <div class="w3-center w3-margin-top">
+        <button class="w3-button w3-theme w3-round-large" onclick="window.location.href='/home/view'">
+            Ir al inicio
+        </button>
+        <button class="w3-button w3-theme w3-round-large w3-margin-right" onclick="window.location.href='/jugar/ruleta'">
+            Volver a jugar
+        </button>
+    </div>
+    <div id="modal-fin" class="modal">
+        <div class="modal-content w3-animate-top">
+            <h2 class="mensaje-fin-juego">{{mensaje_fin}}</h2>
+            <p><strong>Puntaje final:</strong> {{puntaje_final}}</p>
+            <button class="w3-button w3-theme w3-round-large" onclick="cerrarModal()">
+                Aceptar
+            </button>
+        </div>
+    </div>
+{{/mostrar_modal_fin}}
+<script>
+    function cerrarModal() {
+        const modal = document.getElementById('modal-fin');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-abierto');
+        }
+    }
+</script>
+</body>
+</html>
+
+

@@ -4,7 +4,7 @@ class JugarController
 {
     private $view;
     private $model;
-    private $tiempoLimite = 60;
+    private $tiempoLimite = 10;
     public function __construct($model,$view){
         $this->view = $view;
         $this->model = $model;
@@ -137,29 +137,52 @@ class JugarController
         if (!isset($_SESSION['puntaje'])) {
             $_SESSION['puntaje'] = 0;
         }
+        $opciones = [
+            [
+                'letra'  => 'A',
+                'texto'  => $pregunta['opcion_a'],
+                'clase'  => ($respuesta_correcta === 'A') ? 'opcion-correcta' : 'opcion-incorrecta'
+            ],
+            [
+                'letra'  => 'B',
+                'texto'  => $pregunta['opcion_b'],
+                'clase'  => ($respuesta_correcta === 'B') ? 'opcion-correcta' : 'opcion-incorrecta'
+            ],
+            [
+                'letra'  => 'C',
+                'texto'  => $pregunta['opcion_c'],
+                'clase'  => ($respuesta_correcta === 'C') ? 'opcion-correcta' : 'opcion-incorrecta'
+            ],
+            [
+                'letra'  => 'D',
+                'texto'  => $pregunta['opcion_d'],
+                'clase'  => ($respuesta_correcta === 'D') ? 'opcion-correcta' : 'opcion-incorrecta'
+            ],
+        ];
+        $arrayInfoFinal = [
+            'pregunta'          => $pregunta,
+            'puntaje_actual'    => $_SESSION['puntaje'],
+            'color_categoria'   => $this->model->getColorCategoria($_SESSION['categoria_seleccionada']),
+            'es_correcta'       => $acierto,
+            'respuesta_correcta'        => $respuesta_correcta,
+            'texto_respuesta_correcta'  => $texto_respuesta_correcta,
+            'opciones' => $opciones
+        ];
         if ($acierto) {
             $_SESSION['puntaje']++;
             $_SESSION['tiempo_inicio_pregunta'] = time();  // reinicia tiempo para la próxima
 
-
-            $this->view->render('jugarResultadoCorrecto', [
-                'pregunta'          => $pregunta,
-                'puntaje_actual'    => $_SESSION['puntaje'],
-                'color_categoria'   => $this->model->getColorCategoria($_SESSION['categoria_seleccionada']),
-                'es_correcta'       => $acierto,
-                'respuesta_correcta'        => $respuesta_correcta,
-                'texto_respuesta_correcta'  => $texto_respuesta_correcta,
-            ]);
+            $this->view->render('jugarResultado', $arrayInfoFinal);
 
         }
 
         if (!$acierto) {
-            $this->terminarPartida();
+            $this->terminarPartida($arrayInfoFinal);
         }
     }
 
 
-    private function terminarPartidaConMensaje($mensaje) {
+    private function terminarPartidaConMensaje($mensaje, $arrayInfoFinal) {
 
         $id_usuario = $_SESSION['id_usuario'];
         $fecha_inicio = $_SESSION['fecha_inicio_partida'];
@@ -175,19 +198,23 @@ class JugarController
         unset($_SESSION['tiempo_inicio_pregunta']);
         unset($_SESSION['preguntas_mostradas']);
 
-        $this->view->render('jugarResultadoIncorrecto', [
+        $arrayRespuestaIncorrecta = [
             'puntaje_final' => $puntaje,
             'mostrar_modal_fin' => true,
             'mensaje_fin' => $mensaje
-        ]);
+        ];
+
+        $arrayCompleto = array_merge($arrayInfoFinal, $arrayRespuestaIncorrecta);
+
+        $this->view->render('jugarResultado', $arrayCompleto);
     }
 
-    private function terminarPartida() {
-        $this->terminarPartidaConMensaje('¡Respuesta incorrecta!');
+    private function terminarPartida($arrayInfoFinal) {
+        $this->terminarPartidaConMensaje('¡Respuesta incorrecta!', $arrayInfoFinal);
     }
 
-    private function terminarPartidaPorTiempo() {
-        $this->terminarPartidaConMensaje('¡Se acabó el tiempo!');
+    private function terminarPartidaPorTiempo($arrayInfoFinal) {
+        $this->terminarPartidaConMensaje('¡Se acabó el tiempo!', $arrayInfoFinal);
     }
 
 
